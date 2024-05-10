@@ -1,15 +1,8 @@
-const express = require('express')
-const dotenv = require('dotenv').config()
-const cors = require('cors')
-const { mongoose } = require('mongoose')
+const express = require('express');
+const dotenv = require('dotenv').config();
+const cors = require('cors');
+require('./helpers/db');
 const app = express();
-
-// DB connection
-mongoose.connect(process.env.MONGO_URI, {
-    dbName: 'ecommerceDB',
-})
-.then(() => console.log('Database connected'))
-.catch((err) => console.log('Database not connected', err))
 
 // middleware
 app.use(express.json())
