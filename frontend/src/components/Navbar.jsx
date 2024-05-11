@@ -11,6 +11,7 @@ export default function Navbar() {
       <Link to='/about'>Sobre el proyecto</Link>
       <Link to='/login'>Iniciar Sesión</Link>
       <Link to='/register'>Registrarse</Link>
+      <Link to='/profile'>Perfil</Link>
     </ul>
   );
 
