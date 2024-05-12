@@ -2,27 +2,52 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const navList = (
-    <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-      <Link to="/">Inicio</Link>
-      <Link to="/news">Novedades</Link>
-      <Link to="/store">Tienda</Link>
-      <Link to="/contact">Contacto</Link>
-      <Link to="/about">Sobre el proyecto</Link>
-      <Link to="/login">Iniciar sesión</Link>
-      <Link to="/register">Registrarse</Link>
+    <ul>
+      <Link to="/" className="btn btn-ghost ml-3">
+        Inicio
+      </Link>
+      <Link to="/news" className="btn btn-ghost ml-3">
+        Novedades
+      </Link>
+      <Link to="/store" className="btn btn-ghost ml-3">
+        Tienda
+      </Link>
+      <Link to="/contact" className="btn btn-ghost ml-3">
+        Contacto
+      </Link>
+      <Link to="/about" className="btn btn-ghost ml-3">
+        Sobre el proyecto
+      </Link>
+      <Link to="/login" className="btn btn-outline ml-3">
+        Iniciar sesión
+      </Link>
+      <Link to="/register" className="btn btn-primary ml-3 mt-2">
+        Registrarse
+      </Link>
     </ul>
   );
 
   return (
-    <nav className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-4 bg-fuchsia-300">
-      <div className="flex items-center justify-between text-blue-gray-900">
-        <h1>
-          <Link to="/">LAXART</Link>
-        </h1>
-        <div className="flex items-center gap-4">
-          <div className="mr-4 hidden lg:block">{navList}</div>
-        </div>
+    <div className="navbar bg-base-200">
+      <div className="flex-1">
+        <Link to="/" className="btn btn-ghost text-xl">
+          Laxart
+        </Link>
       </div>
-    </nav>
+      <div className="dropdown dropdown-end lg:hidden">
+        <div tabIndex={0} role="button" className="btn btn-ghost">
+          <span>menu</span>
+        </div>
+        <ul
+          tabIndex={0}
+          className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+        >
+          {navList}
+        </ul>
+      </div>
+      <div className="mt-2 mb-4 m-3 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6  max-lg:hidden lg:block">
+        {navList}
+      </div>
+    </div>
   );
 }

@@ -5,6 +5,26 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
+
+function Copyright(props) {
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
+      <Link color="inherit" href="">
+        Laxart
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
 
 export default function Login() {
   const navigate = useNavigate();
@@ -33,39 +53,93 @@ export default function Login() {
     } catch (error) {}
   };
 
-  const createOrGetuser = async (response) => {
-    const decoded = jwtDecode(response); // Error
+  const createOrGetGoogleUser = async (response) => {
+    const decoded = jwtDecode(response.credential); // Error
     console.log(decoded);
   };
 
   return (
     <>
       {!user ? (
-        <form onSubmit={loginUser}>
-          <label>Correo</label>
-          <input
-            className="mx-8"
-            type="email"
-            placeholder="Ingresar correo..."
-            value={data.email}
-            onChange={(e) => setData({ ...data, email: e.target.value })}
-          />
-          <label>Contraseña</label>
-          <input
-            className="mx-8"
-            type="password"
-            placeholder="Ingresar contraseña..."
-            value={data.password}
-            onChange={(e) => setData({ ...data, password: e.target.value })}
-          />
-          <button type="submit" className="bg-blue-400 rounded p-3 m-2">
-            Iniciar sesión
-          </button>
-          <GoogleLogin
-            onSuccess={(response) => createOrGetuser(response)}
-            onError={() => console.log("Error")}
-          />
-        </form>
+        <div className="min-h-screen bg-base-300 flex items-center">
+          <div className="card mx-auto w-full max-w-5xl  shadow-xl">
+            <div className="grid  md:grid-cols-2 grid-cols-1  bg-base-100 rounded-xl">
+              <div className="py-24 px-10">
+                <h2 className="text-2xl font-semibold mb-2 text-center">
+                  Iniciar Sesión
+                </h2>
+                <form onSubmit={loginUser}>
+                  <div className="mb-4">
+                    <div className="form-control w-full mt-4">
+                      <label className="label">
+                        <span className="label-text text-base-content">
+                          Correo
+                        </span>
+                      </label>
+                      <input
+                        className="input input-bordered w-full "
+                        type="email"
+                        placeholder="Correo..."
+                        value={data.email}
+                        onChange={(e) =>
+                          setData({ ...data, email: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="form-control w-full mt-4">
+                      <label className="label">
+                        <span className="label-text text-base-content">
+                          Contraseña
+                        </span>
+                      </label>
+                      <input
+                        className="input input-bordered w-full"
+                        type="password"
+                        placeholder="Contraseña..."
+                        value={data.password}
+                        onChange={(e) =>
+                          setData({ ...data, password: e.target.value })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="text-right text-primary">
+                    <Link to="/forgot-password">
+                      <span className="text-sm  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
+                        ¿Has olvidado tu contraseña?
+                      </span>
+                    </Link>
+                  </div>
+                  <button
+                    type="submit"
+                    className={"btn mt-2 mb-4 w-full btn-primary"}
+                  >
+                    Iniciar sesión
+                  </button>
+                  <GoogleLogin
+                    shape="circle"
+                    onSuccess={createOrGetGoogleUser}
+                  />
+
+                  <div className="text-center mt-4">
+                    ¿No tienes cuenta?{" "}
+                    <Link to="/register">
+                      <span className="  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
+                        ¡Registrate ahora!
+                      </span>
+                    </Link>
+                    <div className="mt-2">
+                      <Copyright />
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div>
+                <img src="" alt="logo clara" />
+              </div>
+            </div>
+          </div>
+        </div>
       ) : (
         navigate("/error")
       )}
