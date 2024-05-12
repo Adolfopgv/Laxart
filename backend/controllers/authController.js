@@ -106,7 +106,6 @@ const loginUser = async (req, res) => {
         (err, token) => {
           if (err) throw err;
           res.cookie("token", token, { httpOnly: true }).json(user); // Quitar en prod?
-          window.location.reload();
         }
       );
     }
