@@ -11,34 +11,39 @@ import {
   Contact,
   News,
   Store,
+  Error,
 } from "./Routes";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
 import { UserContextProvider } from "./context/userContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.withCredentials = true;
 
 export default function App() {
   return (
-    <UserContextProvider>
-      <Navbar />
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-        toastOptions={{ duration: 2000 }}
-      />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/news" element={<News />} />
-        <Route path="/store" element={<Store />} />
-      </Routes>
-    </UserContextProvider>
+    <GoogleOAuthProvider clientId={`${import.meta.env.VITE_APP_GOOGLE_API_TOKEN}`}>
+      <UserContextProvider>
+        <Navbar />
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+          toastOptions={{ duration: 3000 }}
+        />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/store" element={<Store />} />
+          <Route path="/*" element={<Error />} />
+        </Routes>
+      </UserContextProvider>
+    </GoogleOAuthProvider>
   );
 }

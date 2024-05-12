@@ -7,6 +7,7 @@ import Cart from "./pages/Cart.jsx";
 import Contact from "./pages/Contact.jsx";
 import News from "./pages/News.jsx";
 import Store from "./pages/Store.jsx";
+import Error from "./pages/Error.jsx";
 
 export {
     Login,
@@ -17,5 +18,6 @@ export {
     Cart,
     Contact,
     News,
-    Store
+    Store,
+    Error
 };

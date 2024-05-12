@@ -2,10 +2,6 @@ const User = require("../models/userModel");
 const { hashPassword, comparePasswords } = require("../helpers/auth");
 const jwt = require("jsonwebtoken");
 
-const test = (req, res) => {
-  res.json("test is working");
-};
-
 // Register end-point
 const registerUser = async (req, res) => {
   try {
@@ -109,7 +105,8 @@ const loginUser = async (req, res) => {
         {},
         (err, token) => {
           if (err) throw err;
-          res.cookie("token", token).json(user);
+          res.cookie("token", token, { httpOnly: true }).json(user); // Quitar en prod?
+          window.location.reload();
         }
       );
     }
@@ -128,16 +125,26 @@ const getProfile = (req, res) => {
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
       if (err) throw err;
-      res.json(user);
+      res.json(user); // Quitar en prod?
     });
   } else {
     res.json(null);
   }
 };
 
+const logoutUser = async (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({status: "success!"})
+
+  /*res.cookie("token", "", { expires: new Date(0), httpOnly: true });
+  res.status(200).json({ status: "success" });
+  res.end();
+  */
+};
+
 module.exports = {
-  test,
   registerUser,
   loginUser,
   getProfile,
+  logoutUser,
 };
