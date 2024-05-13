@@ -114,7 +114,7 @@ export default function Navbar() {
               <a>Configuración</a>
             </li>
             <li>
-              <button onClick={logoutUser}>Cerrar sesión</button>
+              <button className="btn btn-primary mt-2" onClick={logoutUser}>Cerrar sesión</button>
             </li>
           </ul>
         </div>

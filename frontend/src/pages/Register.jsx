@@ -80,6 +80,22 @@ export default function Register() {
                     <div className="form-control w-full mt-4">
                       <label className="label">
                         <span className="label-text text-base-content">
+                          Usuario
+                        </span>
+                      </label>
+                      <input
+                        className="input input-bordered w-full "
+                        type="text"
+                        placeholder="Correo..."
+                        value={data.username}
+                        onChange={(e) =>
+                          setData({ ...data, username: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="form-control w-full mt-4">
+                      <label className="label">
+                        <span className="label-text text-base-content">
                           Contraseña
                         </span>
                       </label>
