@@ -1,1 +1,28 @@
-POST http://localhost:3000/register
+### Prueba de registro
+POST http://localhost:3000/register HTTP/1.1
+content-type: application/json
+
+{
+    "email": "http@http",
+    "username": "pruebaHttp",
+    "password": "As1234",
+    "repeatPassword": "As1234"
+}
+
+
+### Prueba de login
+POST http://localhost:3000/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "http@http",
+    "password": "As1234"
+}
+
+
+### Prueba coger usuario
+GET http://localhost:3000/profile HTTP/1.1
+
+
+### Prueba logout (borrar cookies)
+POST http://localhost:3000/logout HTTP/1.1

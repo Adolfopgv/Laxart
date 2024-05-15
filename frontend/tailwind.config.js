@@ -8,6 +8,15 @@ module.exports = {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["valentine"],
+    themes: [{
+      valentine: {
+        ...require("daisyui/src/theming/themes")["valentine"],
+        "primary": "#FFFFFF",
+        "secondary": "#fd95b5",
+        "accent": "#ed6187",
+        "base-100": "#ffd4dd"
+
+      }
+    }],
   },
 };

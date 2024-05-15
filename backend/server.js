@@ -4,6 +4,7 @@ const cors = require("cors");
 require("./helpers/db"); // Database connection
 const cookieParser = require("cookie-parser");
 const app = express();
+app.disable("x-powered-by");
 
 // middleware
 app.use(express.json());

@@ -7,6 +7,8 @@ import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
+import TextBoxWithTextOnTop from "../components/TextBoxWithTextOnTop";
+import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 
 function Copyright(props) {
   return (
@@ -34,6 +36,12 @@ export default function Login() {
     password: "",
   });
 
+  const [passwordEye, setPasswordEye] = useState(false);
+
+  const handlePasswordShow = () => {
+    setPasswordEye(!passwordEye);
+  };
+
   const loginUser = async (e) => {
     e.preventDefault();
     const { email, password } = data;
@@ -42,6 +50,7 @@ export default function Login() {
         email,
         password,
       });
+
       if (data.error) {
         toast.error(data.error);
       } else {
@@ -61,7 +70,7 @@ export default function Login() {
   return (
     <>
       {!user ? (
-        <div className="min-h-screen bg-base-300 flex items-center">
+        <div className="min-h-screen bg-primary flex items-center">
           <div className="card mx-auto w-full max-w-5xl  shadow-xl">
             <div className="grid  md:grid-cols-2 grid-cols-1  bg-base-100 rounded-xl">
               <div className="py-24 px-10">
@@ -70,38 +79,33 @@ export default function Login() {
                 </h2>
                 <form onSubmit={loginUser}>
                   <div className="mb-4">
-                    <div className="form-control w-full mt-4">
-                      <label className="label">
-                        <span className="label-text text-base-content">
-                          Correo
-                        </span>
-                      </label>
-                      <input
-                        className="input input-bordered w-full "
-                        type="email"
-                        placeholder="Correo..."
-                        value={data.email}
-                        onChange={(e) =>
-                          setData({ ...data, email: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="form-control w-full mt-4">
-                      <label className="label">
-                        <span className="label-text text-base-content">
-                          Contraseña
-                        </span>
-                      </label>
-                      <input
-                        className="input input-bordered w-full"
-                        type="password"
-                        placeholder="Contraseña..."
-                        value={data.password}
-                        onChange={(e) =>
-                          setData({ ...data, password: e.target.value })
-                        }
-                      />
-                    </div>
+                    <TextBoxWithTextOnTop
+                      text="Correo"
+                      type="email"
+                      placeholder="Correo..."
+                      value={data.email}
+                      onChange={(e) =>
+                        setData({ ...data, email: e.target.value })
+                      }
+                    />
+                    <TextBoxWithTextOnTop
+                      text="Contraseña"
+                      type={passwordEye ? "text" : "password"}
+                      placeholder="Contraseña..."
+                      value={data.password}
+                      onChange={(e) =>
+                        setData({ ...data, password: e.target.value })
+                      }
+                      eye={
+                        <div>
+                          {passwordEye === false ? (
+                            <AiFillEyeInvisible onClick={handlePasswordShow} />
+                          ) : (
+                            <AiFillEye onClick={handlePasswordShow} />
+                          )}
+                        </div>
+                      }
+                    />
                   </div>
                   <div className="text-right text-primary">
                     <Link to="/forgot-password">
@@ -112,7 +116,7 @@ export default function Login() {
                   </div>
                   <button
                     type="submit"
-                    className={"btn mt-2 mb-4 w-full btn-primary"}
+                    className={"btn mt-2 mb-4 w-full btn-accent"}
                   >
                     Iniciar sesión
                   </button>
