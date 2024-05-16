@@ -31,7 +31,7 @@ export default function App() {
         <Toaster
           position="top-center"
           reverseOrder={false}
-          toastOptions={{ duration: 2000 }}
+          toastOptions={{ duration: 2500 }}
         />
         <Routes>
           <Route path="/" element={<Home />} />

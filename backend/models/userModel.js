@@ -19,6 +19,10 @@ const userSchema = new Schema(
     repeatPassword: {
       type: String,
     },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
     shippingAddress: {
       address1: {
         type: String,

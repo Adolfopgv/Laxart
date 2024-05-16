@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function NavbarLoggedOut() {
   const navList = (
-    <ul className="mt-2 mb-4 m-3 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+    <ul className="text-primary mt-2 mb-4 m-3 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       <Link to="/" className="btn btn-ghost">
         Inicio
       </Link>
@@ -29,8 +29,8 @@ export default function NavbarLoggedOut() {
 
   return (
     <div className="navbar bg-accent">
-      <div className="flex-1">
-        <Link to="/" className="btn btn-ghost text-xl">
+      <div className="flex-1 ml-3">
+        <Link to="/" className="btn btn-ghost text-xl text-black">
           Laxart
         </Link>
       </div>

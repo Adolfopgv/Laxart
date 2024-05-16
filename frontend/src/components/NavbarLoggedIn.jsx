@@ -43,7 +43,7 @@ export default function NavbarLoggedIn() {
   );
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-accent">
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost text-xl">
           Laxart
@@ -82,13 +82,13 @@ export default function NavbarLoggedIn() {
         </div>
         <div
           tabIndex={0}
-          className="mt-3 z-[1] card card-compact dropdown-content w-52 bg-base-100 shadow"
+          className="mt-3 z-[1] card card-compact dropdown-content w-52 bg-accent shadow"
         >
           <div className="card-body">
             <span className="font-bold text-lg">8 Items</span>
             <span className="text-info">Subtotal: $999</span>
             <div className="card-actions">
-              <Link to="/cart" className="btn btn-primary btn-block">
+              <Link to="/cart" className="btn btn-base-100 btn-block">
                 View cart
               </Link>
             </div>
@@ -109,7 +109,7 @@ export default function NavbarLoggedIn() {
         </div>
         <ul
           tabIndex={0}
-          className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+          className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-accent rounded-box w-52"
         >
           <li>
             <Link to={"/profile"} className="justify-between">
@@ -121,7 +121,7 @@ export default function NavbarLoggedIn() {
             <a>Configuración</a>
           </li>
           <li>
-            <button className="btn btn-primary mt-2" onClick={logoutUser}>
+            <button className="btn btn-base-100 mt-2" onClick={logoutUser}>
               Cerrar sesión
             </button>
           </li>
@@ -144,7 +144,7 @@ export default function NavbarLoggedIn() {
         </div>
         <ul
           tabIndex={0}
-          className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+          className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-accent rounded-box w-52"
         >
           {navList}
         </ul>

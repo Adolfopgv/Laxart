@@ -1,6 +1,12 @@
 const User = require("../models/userModel");
-const { hashPassword, comparePasswords } = require("../helpers/auth");
+const {
+  hashPassword,
+  comparePasswords,
+  sendEmail,
+} = require("../helpers/auth");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const EmailToken = require("../models/emailToken");
 
 // Register end-point
 const registerUser = async (req, res) => {
@@ -57,19 +63,36 @@ const registerUser = async (req, res) => {
       }
 
       const hashedPassword = await hashPassword(password);
-      const user = await User.create({
+      let user = await User.create({
         email,
         username,
         password: hashedPassword,
-      })
-        .then((user) => {
-          console.log("Usuario creado y guardado:", user);
-        })
-        .catch((error) => {
-          console.error("Error al crear y guardar el usuario:", error);
-        });
+      });
 
-      return res.json(user);
+      if (!user.verified) {
+        let emailToken = await EmailToken.findOne({ userId: user._id });
+        if (!emailToken) {
+          emailToken = await EmailToken.create({
+            userId: user._id,
+            token: crypto.randomBytes(32).toString("hex"),
+          });
+          const url = `${process.env.BASE_URL}users/${user._id}/verify/${emailToken.token}`;
+          await sendEmail(user.email, "¡Verifica tu cuenta de Laxart!", url);
+        }
+        return res.status(200).json({
+          message:
+            "Se ha enviado un correo de verificación, por favor, verifica el correo.",
+        });
+      }
+
+      const emailToken = await EmailToken.create({
+        userId: user._id,
+        token: crypto.randomBytes(32).toString("hex"),
+      });
+      const url = `${process.env.BASE_URL}users/${user._id}/verify/${emailToken.token}`;
+      await sendEmail(user.email, "¡Verifica tu cuenta de Laxart!", url);
+
+      return res.json({ message: "Se ha enviado un email de verifiación" });
     }
   } catch (error) {
     console.log(error);
@@ -133,7 +156,7 @@ const getProfile = (req, res) => {
 
 const logoutUser = async (req, res) => {
   res.clearCookie("token");
-  res.status(200).json({status: "success!"})
+  res.status(200).json({ status: "success!" });
 
   /*res.cookie("token", "", { expires: new Date(0), httpOnly: true });
   res.status(200).json({ status: "success" });
@@ -141,9 +164,30 @@ const logoutUser = async (req, res) => {
   */
 };
 
+const verifyEmailToken = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id });
+    if (!user) return res.status(400).send({ message: "Link no válido" });
+
+    const emailToken = await EmailToken.findOne({
+      userId: user._id,
+      token: req.params.token,
+    });
+    if (!emailToken) return res.status(400).send({ message: "Link no válido" });
+
+    await User.updateOne({ _id: user._id, verified: true });
+    await emailToken.remove();
+
+    res.status(200).json({ message: "¡Email verificado correctamente!" });
+  } catch (error) {
+    res.json(error);
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getProfile,
   logoutUser,
+  verifyEmailToken,
 };

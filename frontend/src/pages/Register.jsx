@@ -29,6 +29,8 @@ export default function Register() {
 
   const registerUser = async (e) => {
     e.preventDefault();
+    const idToast = toast.loading("Registrando usuario...");
+
     const { username, email, password, repeatPassword } = data;
     try {
       const response = await axios.post("/register", {
@@ -37,11 +39,29 @@ export default function Register() {
         password,
         repeatPassword,
       });
+
       if (response.data.error) {
-        toast.error(response.data.error);
+        toast.error(response.data.error, { id: idToast });
       } else {
         setData({});
-        toast.success("¡Usuario registrado satisfactoriamente!");
+        toast.success(
+          (t) => (
+            <span className="text-pretty flex flex-col text-lg">
+              Se ha enviado un correo de verificacion, por favor, verifica el
+              correo
+              <button
+                className="btn btn-accent w-[30%] ml-[70%]"
+                onClick={() => toast.dismiss(t.id)}
+              >
+                Descartar
+              </button>
+            </span>
+          ),
+          {
+            id: idToast,
+            duration: 10000,
+          }
+        );
         navigate("/login");
       }
     } catch (error) {
@@ -91,9 +111,7 @@ export default function Register() {
                       eye={
                         <div>
                           {passwordEye === false ? (
-                            <AiFillEyeInvisible
-                              onClick={handlePasswordShow}
-                            />
+                            <AiFillEyeInvisible onClick={handlePasswordShow} />
                           ) : (
                             <AiFillEye onClick={handlePasswordShow} />
                           )}

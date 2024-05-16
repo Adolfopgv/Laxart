@@ -9,6 +9,7 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import TextBoxWithTextOnTop from "../components/TextBoxWithTextOnTop";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
+import laxart_logo_noback from "../assets/icons/laxart_logo-noback.png"
 
 function Copyright(props) {
   return (
@@ -139,7 +140,7 @@ export default function Login() {
                 </form>
               </div>
               <div>
-                <img src="" alt="logo clara" />
+                <img className="mt-12" src={laxart_logo_noback} alt="logo clara" />
               </div>
             </div>
           </div>

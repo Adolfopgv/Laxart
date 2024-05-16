@@ -3,7 +3,7 @@ POST http://localhost:3000/register HTTP/1.1
 content-type: application/json
 
 {
-    "email": "http@http",
+    "email": "adolfopgv@gmail.com",
     "username": "pruebaHttp",
     "password": "As1234",
     "repeatPassword": "As1234"
@@ -15,7 +15,7 @@ POST http://localhost:3000/login HTTP/1.1
 content-type: application/json
 
 {
-    "email": "http@http",
+    "email": "adolfopgv@gmail.com",
     "password": "As1234"
 }
 
@@ -26,3 +26,7 @@ GET http://localhost:3000/profile HTTP/1.1
 
 ### Prueba logout (borrar cookies)
 POST http://localhost:3000/logout HTTP/1.1
+
+
+### Prueba email verificado
+GET http://localhost:3000/users/:id/verify/:token
