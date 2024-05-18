@@ -23,6 +23,10 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    role: {
+      type: Number,
+      default: 0,
+    },
     shippingAddress: {
       address1: {
         type: String,

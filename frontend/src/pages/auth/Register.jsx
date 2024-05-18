@@ -3,8 +3,8 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
-import { UserContext } from "../context/userContext";
-import TextBoxWithTextOnTop from "../components/TextBoxWithTextOnTop";
+import { UserContext } from "../../context/userContext";
+import TextBoxWithTextOnTop from "../../components/TextBoxWithTextOnTop";
 
 export default function Register() {
   const [passwordEye, setPasswordEye] = useState(false);
@@ -47,8 +47,7 @@ export default function Register() {
         toast.success(
           (t) => (
             <span className="text-pretty flex flex-col text-lg">
-              Se ha enviado un correo de verificacion, por favor, verifica el
-              correo
+              {response.data.message}
               <button
                 className="btn btn-accent w-[30%] ml-[70%]"
                 onClick={() => toast.dismiss(t.id)}

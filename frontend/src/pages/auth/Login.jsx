@@ -1,15 +1,14 @@
 import { useState, useContext } from "react";
-import { UserContext } from "../context/userContext";
+import { UserContext } from "../../context/userContext";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import TextBoxWithTextOnTop from "../components/TextBoxWithTextOnTop";
+import TextBoxWithTextOnTop from "../../components/TextBoxWithTextOnTop";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
-import laxart_logo_noback from "../assets/icons/laxart_logo-noback.png"
+import laxart_logo_noback from "../../assets/icons/laxart_logo-noback.png"
 
 function Copyright(props) {
   return (
@@ -35,6 +34,7 @@ export default function Login() {
   const [data, setData] = useState({
     email: "",
     password: "",
+    role: "",
   });
 
   const [passwordEye, setPasswordEye] = useState(false);
@@ -45,20 +45,26 @@ export default function Login() {
 
   const loginUser = async (e) => {
     e.preventDefault();
-    const { email, password } = data;
+    const { email, password, role } = data;
     try {
       const { data } = await axios.post("/login", {
         email,
         password,
+        role,
       });
 
       if (data.error) {
         toast.error(data.error);
-      } else {
+      } else if (data.role != 1) {
         toast.success(`Bienvenido ${email}!`);
         setUser(data.user);
         setData({});
         navigate("/");
+      } else {
+        toast.success(`Bienvenido admin ${email}`);
+        setUser(data.user);
+        setData({});
+        navigate("/admin-dashboard");
       }
     } catch (error) {}
   };
@@ -108,7 +114,7 @@ export default function Login() {
                       }
                     />
                   </div>
-                  <div className="text-right text-primary">
+                  <div className="text-right link-info">
                     <Link to="/forgot-password">
                       <span className="text-sm  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
                         ¿Has olvidado tu contraseña?
@@ -129,7 +135,7 @@ export default function Login() {
                   <div className="text-center mt-4">
                     ¿No tienes cuenta?{" "}
                     <Link to="/register">
-                      <span className="  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
+                      <span className="link-info inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
                         ¡Registrate ahora!
                       </span>
                     </Link>

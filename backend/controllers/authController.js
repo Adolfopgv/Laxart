@@ -69,22 +69,6 @@ const registerUser = async (req, res) => {
         password: hashedPassword,
       });
 
-      if (!user.verified) {
-        let emailToken = await EmailToken.findOne({ userId: user._id });
-        if (!emailToken) {
-          emailToken = await EmailToken.create({
-            userId: user._id,
-            token: crypto.randomBytes(32).toString("hex"),
-          });
-          const url = `${process.env.BASE_URL}users/${user._id}/verify/${emailToken.token}`;
-          await sendEmail(user.email, "¡Verifica tu cuenta de Laxart!", url);
-        }
-        return res.status(200).json({
-          message:
-            "Se ha enviado un correo de verificación, por favor, verifica el correo.",
-        });
-      }
-
       const emailToken = await EmailToken.create({
         userId: user._id,
         token: crypto.randomBytes(32).toString("hex"),
@@ -122,8 +106,23 @@ const loginUser = async (req, res) => {
     // Check if passwords match
     const matchPassword = await comparePasswords(password, user.password);
     if (matchPassword) {
+      if (!user.verified && user.role != 1) {
+        let emailToken = await EmailToken.findOne({ userId: user._id });
+        if (!emailToken) {
+          emailToken = await EmailToken.create({
+            userId: user._id,
+            token: crypto.randomBytes(32).toString("hex"),
+          });
+          const url = `${process.env.BASE_URL}users/${user._id}/verify/${emailToken.token}`;
+          await sendEmail(user.email, "¡Verifica tu cuenta de Laxart!", url);
+        }
+        return res.status(200).json({
+          message:
+            "Se ha enviado un correo de verificación, por favor, verifica el correo.",
+        });
+      }
       jwt.sign(
-        { email: user.email, id: user._id, username: user.username },
+        { email: user.email, id: user._id, username: user.username, role: user.role },
         process.env.JWT_SECRET,
         {},
         (err, token) => {
@@ -132,6 +131,7 @@ const loginUser = async (req, res) => {
         }
       );
     }
+
     if (!matchPassword) {
       return res.json({
         error: "El correo o la contraseña no coinciden",
@@ -142,13 +142,25 @@ const loginUser = async (req, res) => {
   }
 };
 
-const getProfile = (req, res) => {
+const getProfile = async (req, res) => {
   const { token } = req.cookies;
   if (token) {
-    jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
-      if (err) throw err;
-      res.json(user); // Quitar en prod?
-    });
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const userId = decoded.id;
+
+      const user = await User.findOne({ _id: userId });
+
+      if (user) {
+        res.json(user);
+      } else {
+        res.clearCookie("token");
+        res.json(null);
+      }
+    } catch (error) {
+      res.clearCookie('token');
+      res.json(null);
+    }
   } else {
     res.json(null);
   }
@@ -175,7 +187,7 @@ const verifyEmailToken = async (req, res) => {
     });
     if (!emailToken) return res.status(400).send({ message: "Link no válido" });
 
-    await User.updateOne({ _id: user._id, verified: true });
+    await user.updateOne({ _id: user._id, verified: true });
     await emailToken.remove();
 
     res.status(200).json({ message: "¡Email verificado correctamente!" });
