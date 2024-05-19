@@ -8,7 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import Typography from "@mui/material/Typography";
 import TextBoxWithTextOnTop from "../../components/TextBoxWithTextOnTop";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
-import laxart_logo_noback from "../../assets/icons/laxart_logo-noback.png"
+import laxart_logo from "../../assets/icons/laxart_logo.png";
 
 function Copyright(props) {
   return (
@@ -45,26 +45,29 @@ export default function Login() {
 
   const loginUser = async (e) => {
     e.preventDefault();
-    const { email, password, role } = data;
+    const { email, password, role, verified } = data;
     try {
       const { data } = await axios.post("/login", {
         email,
         password,
         role,
+        verified
       });
 
       if (data.error) {
         toast.error(data.error);
-      } else if (data.role != 1) {
+      } else if (data.role !== 1 && data.verified) {
         toast.success(`Bienvenido ${email}!`);
         setUser(data.user);
         setData({});
         navigate("/");
-      } else {
+      } else if (data.role === 1) {
         toast.success(`Bienvenido admin ${email}`);
         setUser(data.user);
         setData({});
         navigate("/admin-dashboard");
+      } else {
+        toast.error(data.message);
       }
     } catch (error) {}
   };
@@ -146,7 +149,7 @@ export default function Login() {
                 </form>
               </div>
               <div>
-                <img className="mt-12" src={laxart_logo_noback} alt="logo clara" />
+                <img className="mt-12" src={laxart_logo} alt="logo clara" />
               </div>
             </div>
           </div>

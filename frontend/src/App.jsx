@@ -1,5 +1,6 @@
 import { React } from "react";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import { Routes, Route } from "react-router-dom";
 import {
   Home,
@@ -13,12 +14,13 @@ import {
   Store,
   Error,
   EmailVerification,
+  AdminDashboard,
+  AdminProducts
 } from "./Routes";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
 import { UserContextProvider } from "./context/userContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import AdminDashboard from "./pages/admin/AdminDashboard";
 
 axios.defaults.baseURL = import.meta.env.VITE_APP_AXIOS_BASE_URL;
 axios.defaults.withCredentials = true;
@@ -47,8 +49,10 @@ export default function App() {
           <Route path="/store" element={<Store />} />
           <Route path="/users/:id/verify/:token" element={<EmailVerification />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/admin-dashboard/products" element={<AdminProducts />} />
           <Route path="/*" element={<Error />} />
         </Routes>
+        <Footer />
       </UserContextProvider>
     </GoogleOAuthProvider>
   );

@@ -41,6 +41,16 @@ const products = [
     imageAlt:
       "Hand holding black machined steel mechanical pencil with brass tip and top.",
   },
+  {
+    id: 5,
+    name: "Machined Mechanical Pencil",
+    href: "#",
+    price: "$35",
+    imageSrc:
+      "https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg",
+    imageAlt:
+      "Hand holding black machined steel mechanical pencil with brass tip and top.",
+  },
   // More products...
 ];
 
@@ -61,6 +71,7 @@ export default function Store() {
                 />
               </div>
               <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
+              <p className="text-xs text-black">SKU</p>
               <p className="mt-1 text-lg font-medium text-gray-900">
                 {product.price}
               </p>

@@ -9,6 +9,8 @@ import News from "./pages/News.jsx";
 import Store from "./pages/Store.jsx";
 import Error from "./pages/error/Error.jsx";
 import EmailVerification from "./pages/error/EmailVerification.jsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
+import AdminProducts from "./pages/admin/AdminProducts.jsx";
 
 export {
     Login,
@@ -22,4 +24,6 @@ export {
     Store,
     Error,
     EmailVerification,
+    AdminDashboard,
+    AdminProducts
 };
