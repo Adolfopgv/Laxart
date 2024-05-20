@@ -7,7 +7,7 @@ export default function TextBoxWithTextOnTop(props) {
         <span className="label-text text-base-content">{props.text}</span>
       </label>
       <label className="input input-bordered flex items-center gap-2 bg-primary">
-        <input className="w-[100%]" {...props} />
+        <input className="w-[100%] text-black" {...props} />
         <div>{props.eye}</div>
       </label>
     </div>

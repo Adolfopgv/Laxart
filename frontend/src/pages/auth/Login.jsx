@@ -35,6 +35,7 @@ export default function Login() {
     email: "",
     password: "",
     role: "",
+    verified: "",
   });
 
   const [passwordEye, setPasswordEye] = useState(false);
