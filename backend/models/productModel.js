@@ -76,16 +76,16 @@ const productSchema = new Schema(
         type: Number,
         default: 0,
     },
-    reviews: {
+    reviews: [{
         userId: {
             type: Schema.Types.ObjectId,
             ref: "User",
         },
-        review: [{
+        review: {
             type: String,
             trim: true,
-        }]
-    }
+        }
+    }]
   },
   { toJSON: { getters: true }, timestamps: true }
 );

@@ -58,7 +58,7 @@ export default function Login() {
       if (data.error) {
         toast.error(data.error);
       } else if (data.role !== 1 && data.verified) {
-        toast.success(`Bienvenido ${email}!`);
+        toast.success(`Bienvenido ${data.username}!`);
         setUser(data.user);
         setData({});
         navigate("/");
@@ -83,7 +83,7 @@ export default function Login() {
       {!user ? (
         <div className="min-h-screen bg-primary flex items-center">
           <div className="card mx-auto w-full max-w-5xl  shadow-xl">
-            <div className="grid  md:grid-cols-2 grid-cols-1  bg-base-100 rounded-xl">
+            <div className="grid md:grid-cols-2 grid-cols-1 bg-base-100 rounded-xl">
               <div className="py-24 px-10">
                 <h2 className="text-2xl font-semibold mb-2 text-center">
                   Iniciar Sesión

@@ -32,7 +32,7 @@ export default function NavbarLoggedIn() {
             <ul className="p-2 bg-accent rounded-t-none">
               <li>
                 <Link to="/store" className="btn btn-ghost">
-                  Todo
+                  catálogo
                 </Link>
               </li>
               <li>
@@ -172,7 +172,7 @@ export default function NavbarLoggedIn() {
       {/** Icono de busqueda (Queda mal en mobiles) */}
 
       {/** Carrito de compra */}
-      <div className="mr-1 dropdown dropdown-end lg:hidden">
+      {user.role !== 1 && <div className="mr-1 dropdown dropdown-end lg:hidden">
         <div
           tabIndex={0}
           role="button"
@@ -210,7 +210,7 @@ export default function NavbarLoggedIn() {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
 
       {/**Avatar desplegable */}
       <div className="mr-4 dropdown dropdown-end">

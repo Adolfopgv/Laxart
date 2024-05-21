@@ -11,7 +11,7 @@ export default function NavbarLoggedOut() {
             <ul className="p-2 bg-accent rounded-t-none">
               <li>
                 <Link to="/store" className="btn btn-ghost">
-                  Todo
+                  Catálogo
                 </Link>
               </li>
               <li>
