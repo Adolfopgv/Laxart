@@ -52,7 +52,7 @@ export default function Login() {
         email,
         password,
         role,
-        verified
+        verified,
       });
 
       if (data.error) {
@@ -70,7 +70,9 @@ export default function Login() {
       } else {
         toast.error(data.message);
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Error al iniciar sesión");
+    }
   };
 
   const createOrGetGoogleUser = async (response) => {

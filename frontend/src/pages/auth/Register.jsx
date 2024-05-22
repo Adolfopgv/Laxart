@@ -65,7 +65,7 @@ export default function Register() {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Error al registrar usuario");
+      toast.error("Error al registrar usuario", { id: idToast });
     }
   };
 

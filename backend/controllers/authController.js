@@ -73,7 +73,7 @@ const registerUser = async (req, res) => {
         userId: user._id,
         token: crypto.randomBytes(32).toString("hex"),
       });
-      const url = `${process.env.BASE_URL}users/${user._id}/verify/${emailToken.token}`;
+      const url = `${process.env.BASE_URL}/users/${user._id}/verify/${emailToken.token}`;
       await sendEmail(user.email, "¡Verifica tu cuenta de Laxart!", url);
 
       return res.json({ message: "Se ha enviado un email de verifiación" });
@@ -113,7 +113,7 @@ const loginUser = async (req, res) => {
             userId: user._id,
             token: crypto.randomBytes(32).toString("hex"),
           });
-          const url = `${process.env.BASE_URL}users/${user._id}/verify/${emailToken.token}`;
+          const url = `${process.env.BASE_URL}/users/${user._id}/verify/${emailToken.token}`;
           await sendEmail(user.email, "¡Verifica tu cuenta de Laxart!", url);
         }
         return res.status(200).json({

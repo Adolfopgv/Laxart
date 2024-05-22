@@ -34,38 +34,14 @@ const productSchema = new Schema(
         type: Array,
         default: [
             {
-                type1: {
-                    type: String,
-                    default: "Collar"
-                },
-                type2: {
-                    type: String,
-                    default: "Pendiente suelto"
-                },
-                type3: {
-                    type: String,
-                    default: "Par de pendientes"
-                },
-                type4: {
-                    type: String,
-                    default: "Llavero"
-                },
-                type5: {
-                    type: String,
-                    default: "Chocker"
-                },
-                type6: {
-                    type: String,
-                    default: "Imán"
-                },
-                type7: {
-                    type: String,
-                    default: "Pinza para el pelo"
-                },
-                type8: {
-                    type: String,
-                    default: "Broche"
-                }
+                type1: "Collar",
+                type2: "Pendiente suelto",
+                type3: "Par de pendientes",
+                type4: "Llavero",
+                type5: "Chocker",
+                type6: "Imán",
+                type7: "Pinza para el pelo",
+                type8: "Broche",
             }
         ]
     },
