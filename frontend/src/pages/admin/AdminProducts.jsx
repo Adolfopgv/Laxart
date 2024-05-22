@@ -64,7 +64,7 @@ export default function AdminProducts() {
     <>
       {user && user.role === 1 ? (
         <>
-          <div className="flex lg:flex-row max-lg:flex-col">
+          <div className="flex lg:flex-row max-lg:flex-col-reverse">
             <div className="m-10 lg:w-2/4">
               <h1 className="card-title">Añadir un nuevo producto</h1>
               <form onSubmit="">
