@@ -22,9 +22,6 @@ const productSchema = new Schema(
         type: String,
         trim: true,
     },
-    imageAlt: {
-        type: String
-    },
     genre: {
         type: String,
         required: true,

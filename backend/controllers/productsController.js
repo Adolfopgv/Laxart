@@ -1,7 +1,5 @@
 const Product = require("../models/productModel");
 
-//const uploadProduct
-
 const uploadProduct = async (req, res) => {
   try {
     const { productName, description, price, genre, image } = req.body;
@@ -66,9 +64,41 @@ const uploadProduct = async (req, res) => {
         });
       }
     }
+  } catch (error) {
+    res.json({ error: "Error al insertar producto" });
+  }
+};
+
+const getProducts = async (req, res) => {
+  const products = await Product.find();
+
+  if (products) {
+    res.json(products);
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    await Product.findByIdAndDelete(productId);
+    res.status(200).json({ message: "Producto eliminado correctamente" });
+  } catch (error) {
+    res.status(500).json({ error: "Error al eliminar el producto" });
+  }
+};
+
+const updateProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const { productName, description, price, genre, image } = req.body;
+
+    // await Product.findByIdAndUpdate(productId, {$set: });
   } catch (error) {}
 };
 
 module.exports = {
   uploadProduct,
+  getProducts,
+  deleteProduct,
+  updateProduct,
 };
