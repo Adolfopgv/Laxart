@@ -92,8 +92,17 @@ const updateProduct = async (req, res) => {
     const productId = req.params.id;
     const { productName, description, price, genre, image } = req.body;
 
-    // await Product.findByIdAndUpdate(productId, {$set: });
-  } catch (error) {}
+    await Product.findByIdAndUpdate(productId, {
+      productName: productName,
+      description: description,
+      price: price,
+      genre: genre,
+      image: image,
+    });
+    res.status(200).json({ message: "Producto actualizado correctamente " });
+  } catch (error) {
+    res.status(500).json({ error: "Error al actualizar el producto" });
+  }
 };
 
 module.exports = {

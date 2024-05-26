@@ -12,6 +12,7 @@ import {
   Contact,
   News,
   Store,
+  Product,
   Error,
   EmailVerification,
   AdminDashboard,
@@ -47,6 +48,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/news" element={<News />} />
           <Route path="/store" element={<Store />} />
+          <Route path="/store/:productName" element={<Product />} />
           <Route path="/users/:id/verify/:token" element={<EmailVerification />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin-dashboard/products" element={<AdminProducts />} />

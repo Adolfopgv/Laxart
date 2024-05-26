@@ -11,6 +11,7 @@ import Error from "./pages/error/Error.jsx";
 import EmailVerification from "./pages/error/EmailVerification.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import AdminProducts from "./pages/admin/AdminProducts.jsx";
+import Product from "./pages/Product.jsx";
 
 export {
     Login,
@@ -22,6 +23,7 @@ export {
     Contact,
     News,
     Store,
+    Product,
     Error,
     EmailVerification,
     AdminDashboard,
