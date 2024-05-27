@@ -1,14 +1,28 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../context/userContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import TextBoxWithTextOnTop from "./TextBoxWithTextOnTop";
 
-export default function NavbarLoggedIn() {
+export default function NavbarLoggedIn({ props }) {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
+  const [genres, setGenres] = useState([]);
+
+  useEffect(() => {
+    const getGenres = async () => {
+      try {
+        const response = await axios.get("/get-products");
+        const uniqueGenres = [...new Set(response.data.map(product => product.genre))];
+        setGenres(uniqueGenres);
+      } catch (error) {
+        console.error("Error recogiendo los productos:", error);
+      }
+    };
+    getGenres();
+  }, []);
 
   const logoutUser = async () => {
     try {
@@ -31,13 +45,17 @@ export default function NavbarLoggedIn() {
             <summary className={`btn btn-ghost ${padding}`}>Tienda</summary>
             <ul className="p-2 bg-accent rounded-t-none">
               <li>
-                <Link to="/store" className="btn btn-ghost">
-                  catálogo
+                <Link to="/store/all" className="btn btn-ghost">
+                  Catálogo
                 </Link>
               </li>
-              <li>
-                <a>Link 2</a>
-              </li>
+              {genres.map((genre, index) => (
+                <li key={index}>
+                  <Link to={`/store/${genre}`} className="btn btn-ghost">
+                    {genre}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </details>
         </li>
@@ -123,6 +141,7 @@ export default function NavbarLoggedIn() {
         {user.role !== 1 ? (
           <>
             <div>{navList}</div>
+            
             {/** Carrito de compra */}
             <div className="mr-1 dropdown dropdown-end">
               <div

@@ -5,11 +5,16 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import Error from "./error/Error";
 import { Link } from "react-router-dom";
+import StarRating from "../components/StarRating";
 
 export default function Product() {
   const { user } = useContext(UserContext);
   const location = useLocation();
   const product = location.state.product;
+
+  const addToCart = (product) => {
+    
+  }
 
   return (
     <>
@@ -31,7 +36,7 @@ export default function Product() {
               </h1>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-0.5">
-                  {product.rating}
+                  <StarRating rating={product.rating} />
                 </div>
               </div>
               <div className="text-4xl font-bold">{product.price}€</div>
@@ -41,7 +46,7 @@ export default function Product() {
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
                 {user ? (
                   <>
-                    <button className="btn btn-accent">
+                    <button className="btn btn-accent" onClick={() => addToCart(product)}>
                       Añadir al carrito
                     </button>
                     <button className="btn btn-primary w-[10%]">

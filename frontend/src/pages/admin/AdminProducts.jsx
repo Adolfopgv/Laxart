@@ -4,6 +4,7 @@ import TextBoxWithTextOnTop from "../../components/TextBoxWithTextOnTop";
 import Error from "../error/Error";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import StarRating from "../../components/StarRating";
 
 export default function AdminProducts() {
   const { user } = useContext(UserContext);
@@ -163,7 +164,7 @@ export default function AdminProducts() {
         setProducts(await axios.get("/get-products"));
         setEditProductId(null);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
@@ -380,14 +381,16 @@ export default function AdminProducts() {
                             <td className="whitespace-nowrap px-6 py-4">
                               {product.genre}
                             </td>
-                            <td className="whitespace px-6 py-4">
-                              {product.description}
+                            <td className="px-6 py-4 ">
+                              <div className="overflow-y-auto max-h-32">
+                                {product.description}
+                              </div>
                             </td>
                             <td className="whitespace-nowrap px-6 py-4">
-                              {product.price} €
+                              {product.price}€
                             </td>
                             <td className="whitespace-nowrap px-6 py-4">
-                              {product.rating}
+                              {<StarRating rating={product.rating} />}
                             </td>
                             <td className="px-6 py-4">
                               <button

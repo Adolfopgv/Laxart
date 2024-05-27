@@ -47,8 +47,8 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/news" element={<News />} />
-          <Route path="/store" element={<Store />} />
-          <Route path="/store/:productName" element={<Product />} />
+          <Route path="/store/:genre" element={<Store />} />
+          <Route path="/store/:genre/:productName" element={<Product />} />
           <Route path="/users/:id/verify/:token" element={<EmailVerification />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin-dashboard/products" element={<AdminProducts />} />
