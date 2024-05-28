@@ -1,7 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
-require("./helpers/db"); // Database connection
+const db = require("./helpers/db"); // Database connection
 const cookieParser = require("cookie-parser");
 const app = express();
 app.disable("x-powered-by");
@@ -16,6 +16,7 @@ app.use(express.json());
 
 app.use("/", require("./routes/authRoutes"));
 app.use("/", require("./routes/productsRoutes"));
+app.use("/", require("./routes/cartRoutes"));
 
 const port = process.env.PORT;
 app.listen(port, () =>

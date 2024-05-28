@@ -36,6 +36,10 @@ const userSchema = new Schema(
       type: Number,
       default: 0,
     },
+    shoppingCart: {
+      type: Schema.Types.ObjectId,
+      ref: "Cart",
+    },
     shippingAddress: {
       address1: {
         type: String,
