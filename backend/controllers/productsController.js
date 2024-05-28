@@ -77,6 +77,17 @@ const getProducts = async (req, res) => {
   }
 };
 
+const getProductById = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await Product.findById(productId);
+    res.status(200).json(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error del servidor" });
+  }
+};
+
 const deleteProduct = async (req, res) => {
   try {
     const productId = req.params.id;
@@ -110,4 +121,5 @@ module.exports = {
   getProducts,
   deleteProduct,
   updateProduct,
+  getProductById,
 };

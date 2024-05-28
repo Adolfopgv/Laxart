@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import { toast } from "react-hot-toast";
@@ -12,18 +12,21 @@ export default function Product() {
   const location = useLocation();
   const product = location.state.product;
 
-  const addToCart = async (product) => {
+  const addToCart = async () => {
     try {
-      const response = await axios.post(`/add-to-cart/${user._id}/${product}`)
+      const response = await axios.post(
+        `/add-to-cart/${user._id}/${product._id}`
+      );
       if (response.data.error) {
-        toast.error(response.data.error)
+        toast.error(response.data.error);
       } else {
-        toast.success(response.data.message)
+        toast.success(response.data.message);
       }
     } catch (error) {
-      toast.error("Error")
+      toast.error(error.response.data.error);
+      console.error(error);
     }
-  }
+  };
 
   return (
     <>
@@ -55,7 +58,10 @@ export default function Product() {
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
                 {user ? (
                   <>
-                    <button className="btn btn-accent" onClick={() => addToCart(product)}>
+                    <button
+                      className="btn btn-accent"
+                      onClick={() => addToCart()}
+                    >
                       Añadir al carrito
                     </button>
                     <button className="btn btn-primary w-[10%]">

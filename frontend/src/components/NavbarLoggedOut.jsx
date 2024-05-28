@@ -1,29 +1,8 @@
 import { Link } from "react-router-dom";
 import TextBoxWithTextOnTop from "./TextBoxWithTextOnTop";
+import ShopMenuComponent from "./ShopMenuComponent";
 
-export default function NavbarLoggedOut() {
-  function menuTienda(showHide, margin, padding) {
-    return (
-      <ul className={`menu menu-horizontal ${showHide}`}>
-        <li>
-          <details className={`flex justify-center ${margin}`}>
-            <summary className={`btn btn-ghost ${padding}`}>Tienda</summary>
-            <ul className="p-2 bg-accent rounded-t-none">
-              <li>
-                <Link to="/store" className="btn btn-ghost">
-                  Catálogo
-                </Link>
-              </li>
-              <li>
-                <a>Link 2</a>
-              </li>
-            </ul>
-          </details>
-        </li>
-      </ul>
-    );
-  }
-
+export default function NavbarLoggedOut({ genres }) {
   const navList = (
     <ul className="text-primary mt-2 mb-4 m-3 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       <Link to="/" className="btn btn-ghost">
@@ -32,10 +11,13 @@ export default function NavbarLoggedOut() {
       <Link to="/news" className="btn btn-ghost">
         Novedades
       </Link>
-      {/** menu en pantallas normales */}
-      {menuTienda("max-lg:hidden lg:flex", "", "pt-4")}
-      {/** menu en pantallas pequeñas */}
-      {menuTienda("lg:hidden", "ml-9", "pt-3")}
+      {/** menu catalogo */}
+      <ShopMenuComponent
+        showHide="lg:flex "
+        margin="max-lg:ml-9"
+        padding="lg:pt-4 max-lg:pt-3"
+        genres={genres}
+      />
       <div className="mr-1 dropdown dropdown-end max-lg:hidden lg:block">
         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
           <svg

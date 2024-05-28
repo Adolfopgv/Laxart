@@ -1,44 +1,16 @@
 import { Link } from "react-router-dom";
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { UserContext } from "../context/userContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import TextBoxWithTextOnTop from "./TextBoxWithTextOnTop";
+import ShopMenuComponent from "./ShopMenuComponent";
+import ShoppingCartComponent from "./ShoppingCartComponent";
 
-export default function NavbarLoggedIn() {
+export default function NavbarLoggedIn({ genres, cartProducts }) {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
-  const [genres, setGenres] = useState([]);
-
-  const [cartProducts, setCartProducts] = useState([]);
-
-  useEffect(() => {
-    const fetchCartProducts = async () => {
-      try {
-        const response = await axios.get(`/get-cart-products/${user._id}`);
-        setCartProducts(response.data);
-      } catch (error) {
-        console.error("Error recogiendo productos del carrito");
-      }
-    };
-    fetchCartProducts();
-  }, []);
-
-  useEffect(() => {
-    const getGenres = async () => {
-      try {
-        const response = await axios.get("/get-products");
-        const uniqueGenres = [
-          ...new Set(response.data.map((product) => product.genre)),
-        ];
-        setGenres(uniqueGenres);
-      } catch (error) {
-        console.error("Error recogiendo los productos:", error);
-      }
-    };
-    getGenres();
-  }, []);
 
   const logoutUser = async () => {
     try {
@@ -53,32 +25,6 @@ export default function NavbarLoggedIn() {
     }
   };
 
-  function menuTienda(showHide, margin, padding) {
-    return (
-      <ul className={`menu menu-horizontal ${showHide}`}>
-        <li>
-          <details className={`flex justify-center ${margin}`}>
-            <summary className={`btn btn-ghost ${padding}`}>Tienda</summary>
-            <ul className="p-2 bg-accent rounded-t-none">
-              <li>
-                <Link to="/store/all" className="btn btn-ghost">
-                  Catálogo
-                </Link>
-              </li>
-              {genres.map((genre, index) => (
-                <li key={index}>
-                  <Link to={`/store/${genre}`} className="btn btn-ghost">
-                    {genre}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </details>
-        </li>
-      </ul>
-    );
-  }
-
   const navList = (
     <ul className="text-primary mt-2 mb-4 m-3 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       <Link to="/" className="btn btn-ghost">
@@ -87,10 +33,15 @@ export default function NavbarLoggedIn() {
       <Link to="/news" className="btn btn-ghost">
         Novedades
       </Link>
-      {/** menu en pantallas normales */}
-      {menuTienda("max-lg:hidden lg:flex", "", "pt-4")}
-      {/** menu en pantallas pequeñas */}
-      {menuTienda("lg:hidden", "ml-9", "pt-3")}
+      {/** menu catalogo */}
+      <ShopMenuComponent
+        showHide="lg:flex "
+        margin="max-lg:ml-9"
+        padding="lg:pt-4 max-lg:pt-3"
+        genres={genres}
+      />
+
+      {/** icono de busqueda */}
       <div className="mr-1 dropdown dropdown-end max-lg:hidden lg:block">
         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
           <svg
@@ -157,54 +108,6 @@ export default function NavbarLoggedIn() {
         {user.role !== 1 ? (
           <>
             <div>{navList}</div>
-
-            {/** Carrito de compra */}
-            <div className="mr-1 dropdown dropdown-end">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost btn-circle mr-5"
-              >
-                <div className="indicator">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="black"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                  </svg>
-                  <span className="badge badge-sm indicator-item">
-                    {cartProducts.length}
-                  </span>
-                </div>
-              </div>
-              <div
-                tabIndex={0}
-                className="mt-3 z-[1] card card-compact dropdown-content w-52 bg-accent shadow"
-              >
-                <div className="card-body">
-                  <span className="font-bold text-lg">
-                    {cartProducts.length} Productos
-                  </span>
-                  <span className="text-info">Total: €</span>
-                  <div className="card-actions">
-                    {cartProducts.map((cartProduct) => (
-                      <span>{cartProduct.productName}</span>
-                    ))}
-                    <Link to="/cart" className="btn btn-base-100 btn-block">
-                      Ver carrito
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
           </>
         ) : (
           <div>{adminNavList}</div>
@@ -213,47 +116,9 @@ export default function NavbarLoggedIn() {
 
       {/** Icono de busqueda (Queda mal en mobiles) */}
 
-      {/** Carrito de compra */}
+      {/** Carrito de compra pantallas pequeñas */}
       {user.role !== 1 && (
-        <div className="mr-1 dropdown dropdown-end lg:hidden">
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle mr-5"
-          >
-            <div className="indicator">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="black"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-              <span className="badge badge-sm indicator-item">8</span>
-            </div>
-          </div>
-          <div
-            tabIndex={0}
-            className="mt-3 z-[1] card card-compact dropdown-content w-52 bg-accent shadow"
-          >
-            <div className="card-body">
-              <span className="font-bold text-lg">8 Items</span>
-              <span className="text-info">Subtotal: $999</span>
-              <div className="card-actions">
-                <Link to="/cart" className="btn btn-base-100 btn-block">
-                  View cart
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ShoppingCartComponent cartProducts={cartProducts} />
       )}
 
       {/**Avatar desplegable */}
