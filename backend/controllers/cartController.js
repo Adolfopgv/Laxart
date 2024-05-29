@@ -1,34 +1,38 @@
 const Cart = require("../models/cartModel");
-const User = require("../models/userModel");
-const Product = require("../models/productModel");
 
 const addToCart = async (req, res) => {
   try {
     const userId = req.params.userid;
     const productId = req.params.product;
 
-    if (!userId && !productId) {
-      return res.json({
-        error: "Error al añadir producto",
-      });
+    if (!userId || !productId) {
+      return res.json({ error: "Error al añadir producto" });
     }
 
-    const user = await User.findById(userId);
-    const product = await Product.findById(productId);
+    const cart = await Cart.findOne({ userId });
 
-    let cart = await Cart.findOne({ userId: user._id });
     if (!cart) {
-      cart = await Cart.create({
-        userId: user._id,
-        products: [product._id],
+      const newCart = new Cart({
+        userId,
+        products: [{ product: productId, quantity: 1 }],
       });
+      await newCart.save();
+      return res.status(200).json({ message: "Producto añadido al carrito" });
+    }
+
+    const productIndex = cart.products.findIndex(
+      (p) => p.product.toString() === productId
+    );
+
+    if (productIndex !== -1) {
+      cart.products[productIndex].quantity += 1;
     } else {
-      cart.products.push([product._id]);
+      cart.products.push({ product: productId, quantity: 1 });
     }
 
     await cart.save();
 
-    res.status(200).json({ message: "Producto añadido al carrito " });
+    res.status(200).json({ message: "Producto añadido al carrito" });
   } catch (error) {
     res.status(500).json({ error: "Error del servidor" });
   }

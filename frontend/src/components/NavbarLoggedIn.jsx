@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
+import { CartContext } from "../context/cartContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -8,9 +9,27 @@ import TextBoxWithTextOnTop from "./TextBoxWithTextOnTop";
 import ShopMenuComponent from "./ShopMenuComponent";
 import ShoppingCartComponent from "./ShoppingCartComponent";
 
-export default function NavbarLoggedIn({ genres, cartProducts }) {
+export default function NavbarLoggedIn({ genres }) {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
+  const { productAdded, setProductAdded } = useContext(CartContext);
+  const [cartProducts, setCartProducts] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      const fetchCartProducts = async () => {
+        try {
+          const response = await axios.get(`/get-cart-products/${user._id}`);
+          if (!response.data.error) {
+            setCartProducts(response.data);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchCartProducts();
+    }
+  }, [user, productAdded]);
 
   const logoutUser = async () => {
     try {
@@ -116,10 +135,8 @@ export default function NavbarLoggedIn({ genres, cartProducts }) {
 
       {/** Icono de busqueda (Queda mal en mobiles) */}
 
-      {/** Carrito de compra pantallas pequeñas */}
-      {user.role !== 1 && (
-        <ShoppingCartComponent cartProducts={cartProducts} />
-      )}
+      {/** Carrito de compra */}
+      {user.role !== 1 && <ShoppingCartComponent cartProducts={cartProducts} />}
 
       {/**Avatar desplegable */}
       <div className="mr-4 dropdown dropdown-end">

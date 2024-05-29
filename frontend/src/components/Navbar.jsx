@@ -7,7 +7,6 @@ import axios from "axios";
 export default function Navbar() {
   const { user } = useContext(UserContext);
   const [genres, setGenres] = useState([]);
-  const [cartProducts, setCartProducts] = useState([]);
 
   useEffect(() => {
     const getGenres = async () => {
@@ -24,26 +23,10 @@ export default function Navbar() {
     getGenres();
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      const fetchCartProducts = async () => {
-        try {
-          const response = await axios.get(`/get-cart-products/${user._id}`);
-          if (!response.data.error) {
-            setCartProducts(response.data);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchCartProducts();
-    }
-  }, [user]);
-
   return (
     <>
       {user ? (
-        <NavBarLoggedIn genres={genres} cartProducts={cartProducts} />
+        <NavBarLoggedIn genres={genres} />
       ) : (
         <NavBarLoggedOut genres={genres} />
       )}

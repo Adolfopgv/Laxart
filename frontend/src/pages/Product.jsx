@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { UserContext } from "../context/userContext";
+import { CartContext } from "../context/cartContext";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import Error from "./error/Error";
@@ -9,6 +10,7 @@ import StarRating from "../components/StarRating";
 
 export default function Product() {
   const { user } = useContext(UserContext);
+  const { productAdded, setProductAdded } = useContext(CartContext);
   const location = useLocation();
   const product = location.state.product;
 
@@ -21,6 +23,7 @@ export default function Product() {
         toast.error(response.data.error);
       } else {
         toast.success(response.data.message);
+        setProductAdded((val) => !val);
       }
     } catch (error) {
       toast.error(error.response.data.error);

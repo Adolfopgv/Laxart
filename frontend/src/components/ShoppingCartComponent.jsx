@@ -8,31 +8,33 @@ const ShoppingCartComponent = ({ cartProducts }) => {
   const [quantity, setQuantity] = useState(0);
 
   useEffect(() => {
+    console.log("Cart Products:", cartProducts);
+
+    if (!Array.isArray(cartProducts)) {
+      console.error("cartProducts is not an array:", cartProducts);
+      return;
+    }
+
     const getProducts = async () => {
       try {
-        const productIds = cartProducts.map((cartProduct) => cartProduct._id);
         const productDetails = await Promise.all(
-          productIds.map(async (productId) => {
-            const response = await axios.get(`/get-product/${productId}`);
-            return response.data;
+          cartProducts.map(async (cartProduct) => {
+            const response = await axios.get(
+              `/get-product/${cartProduct.product}`
+            );
+            return { ...response.data, quantity: cartProduct.quantity };
           })
         );
 
-        const productMap = productDetails.reduce((acc, product) => {
-          if (!acc[product._id]) {
-            acc[product._id] = { ...product, quantity: 1 };
-          } else {
-            acc[product._id].quantity += 1;
-          }
-          //   setQuantity(acc[product._id].quantity);
-          return acc;
-        }, {});
+        setProducts(productDetails);
 
-        const uniqueProducts = Object.values(productMap);
+        const totalQuantity = productDetails.reduce(
+          (acc, product) => acc + product.quantity,
+          0
+        );
+        setQuantity(totalQuantity);
 
-        setProducts(uniqueProducts);
-
-        const total = uniqueProducts.reduce(
+        const total = productDetails.reduce(
           (acc, curr) => acc + Number(curr.price) * curr.quantity,
           0
         );
@@ -41,10 +43,13 @@ const ShoppingCartComponent = ({ cartProducts }) => {
         console.error(error);
       }
     };
+
     getProducts();
   }, [cartProducts]);
 
-  const deleteCartProduct = () => {};
+  const deleteCartProduct = (productId) => {
+    // Lógica para eliminar el producto del carrito
+  };
 
   return (
     <div className="mr-1 dropdown dropdown-end">
@@ -72,8 +77,8 @@ const ShoppingCartComponent = ({ cartProducts }) => {
         className="mt-3 z-[1] card card-compact dropdown-content w-72 bg-accent shadow"
       >
         <div className="card-body">
-          <span className="font-bold text-lg">{products.length} Productos</span>
-          <span className="text-black">Total: {totalPrice}€</span>
+          <span className="font-bold text-lg">{quantity} Productos</span>
+          <span className="text-black">Total: €{totalPrice.toFixed(2)}</span>
           <div className="card-actions overflow-auto max-h-96">
             {products.map((product) => (
               <div
@@ -88,7 +93,7 @@ const ShoppingCartComponent = ({ cartProducts }) => {
                 </div>
                 <button
                   className="btn btn-ghost ml-4 flex items-center justify-center"
-                  onClick={() => deleteCartProduct()}
+                  onClick={() => deleteCartProduct(product._id)}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
