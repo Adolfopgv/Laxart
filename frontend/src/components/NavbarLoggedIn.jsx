@@ -12,24 +12,6 @@ import ShoppingCartComponent from "./ShoppingCartComponent";
 export default function NavbarLoggedIn({ genres }) {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
-  const { productAdded, setProductAdded } = useContext(CartContext);
-  const [cartProducts, setCartProducts] = useState([]);
-
-  useEffect(() => {
-    if (user) {
-      const fetchCartProducts = async () => {
-        try {
-          const response = await axios.get(`/get-cart-products/${user._id}`);
-          if (!response.data.error) {
-            setCartProducts(response.data);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchCartProducts();
-    }
-  }, [user, productAdded]);
 
   const logoutUser = async () => {
     try {
@@ -136,7 +118,7 @@ export default function NavbarLoggedIn({ genres }) {
       {/** Icono de busqueda (Queda mal en mobiles) */}
 
       {/** Carrito de compra */}
-      {user.role !== 1 && <ShoppingCartComponent cartProducts={cartProducts} />}
+      {user.role !== 1 && <ShoppingCartComponent />}
 
       {/**Avatar desplegable */}
       <div className="mr-4 dropdown dropdown-end">

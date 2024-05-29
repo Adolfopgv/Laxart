@@ -12,20 +12,19 @@ const addToCart = async (req, res) => {
     const cart = await Cart.findOne({ userId });
 
     if (!cart) {
-      const newCart = new Cart({
+      await Cart.create({
         userId,
         products: [{ product: productId, quantity: 1 }],
       });
-      await newCart.save();
       return res.status(200).json({ message: "Producto añadido al carrito" });
     }
 
-    const productIndex = cart.products.findIndex(
-      (p) => p.product.toString() === productId
+    const productInCart = cart.products.find(
+      (item) => item.product.toString() === productId
     );
 
-    if (productIndex !== -1) {
-      cart.products[productIndex].quantity += 1;
+    if (productInCart) {
+      productInCart.quantity += 1;
     } else {
       cart.products.push({ product: productId, quantity: 1 });
     }
@@ -40,7 +39,29 @@ const addToCart = async (req, res) => {
 
 const removeFromCart = async (req, res) => {
   try {
-  } catch (error) {}
+    const userId = req.params.userid;
+    const productId = req.params.product;
+
+    const cart = await Cart.findOne({ userId });
+
+    const productInCart = cart.products.find(
+      (item) => item.product.toString() === productId
+    );
+
+    if (productInCart && productInCart.quantity > 1) {
+      productInCart.quantity -= 1;
+    } else if (productInCart.quantity <= 1) {
+      productInCart.deleteOne();
+    } else {
+      return res.json({ error: "No se ha podido eliminar el producto" });
+    }
+
+    await cart.save();
+
+    res.status(200).json({ message: "Producto eliminado" });
+  } catch (error) {
+    res.status(500).json({ error: "Error del servidor" });
+  }
 };
 
 const getCartProducts = async (req, res) => {

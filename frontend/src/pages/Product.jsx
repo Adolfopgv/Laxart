@@ -10,9 +10,9 @@ import StarRating from "../components/StarRating";
 
 export default function Product() {
   const { user } = useContext(UserContext);
-  const { productAdded, setProductAdded } = useContext(CartContext);
+  const { setCartChanged } = useContext(CartContext);
   const location = useLocation();
-  const product = location.state.product;
+  const product = location.state?.product;
 
   const addToCart = async () => {
     try {
@@ -23,7 +23,7 @@ export default function Product() {
         toast.error(response.data.error);
       } else {
         toast.success(response.data.message);
-        setProductAdded((val) => !val);
+        setCartChanged((val) => !val);
       }
     } catch (error) {
       toast.error(error.response.data.error);

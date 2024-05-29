@@ -1,54 +1,28 @@
 import { Link } from "react-router-dom";
-import { memo, useState, useEffect } from "react";
+import { memo, useState, useEffect, useContext } from "react";
+import { UserContext } from "../context/userContext";
+import { CartContext } from "../context/cartContext";
 import axios from "axios";
+import toast from "react-hot-toast";
 
-const ShoppingCartComponent = ({ cartProducts }) => {
-  const [products, setProducts] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [quantity, setQuantity] = useState(0);
+const ShoppingCartComponent = () => {
+  const { user } = useContext(UserContext);
+  const { setCartChanged, products, quantity, totalPrice } =
+    useContext(CartContext);
 
-  useEffect(() => {
-    console.log("Cart Products:", cartProducts);
+  const deleteCartProduct = async (productId) => {
+    try {
+      const response = await axios.delete(
+        `/remove-from-cart/${user._id}/${productId}`
+      );
 
-    if (!Array.isArray(cartProducts)) {
-      console.error("cartProducts is not an array:", cartProducts);
-      return;
-    }
-
-    const getProducts = async () => {
-      try {
-        const productDetails = await Promise.all(
-          cartProducts.map(async (cartProduct) => {
-            const response = await axios.get(
-              `/get-product/${cartProduct.product}`
-            );
-            return { ...response.data, quantity: cartProduct.quantity };
-          })
-        );
-
-        setProducts(productDetails);
-
-        const totalQuantity = productDetails.reduce(
-          (acc, product) => acc + product.quantity,
-          0
-        );
-        setQuantity(totalQuantity);
-
-        const total = productDetails.reduce(
-          (acc, curr) => acc + Number(curr.price) * curr.quantity,
-          0
-        );
-        setTotalPrice(total);
-      } catch (error) {
-        console.error(error);
+      if (!response.data.error) {
+        toast.success(response.data.message);
+        setCartChanged((val) => !val);
+      } else {
+        toast.error(response.data.error);
       }
-    };
-
-    getProducts();
-  }, [cartProducts]);
-
-  const deleteCartProduct = (productId) => {
-    // Lógica para eliminar el producto del carrito
+    } catch (error) {}
   };
 
   return (
