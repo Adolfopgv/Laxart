@@ -115,7 +115,7 @@ export default function NavbarLoggedIn({ genres }) {
         )}
       </div>
 
-      {/** Icono de busqueda (Queda mal en mobiles) */}
+      {/** Icono de busqueda (Queda mal en moviles) */}
 
       {/** Carrito de compra */}
       {user.role !== 1 && <ShoppingCartComponent />}
