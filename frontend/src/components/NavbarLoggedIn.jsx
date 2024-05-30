@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { UserContext } from "../context/userContext";
-import { CartContext } from "../context/cartContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -14,11 +13,12 @@ export default function NavbarLoggedIn({ genres }) {
   const { user, setUser } = useContext(UserContext);
 
   const logoutUser = async () => {
+    const idToast = toast.loading("Cerrando sesión...");
     try {
       const res = await axios.post("/logout");
       if (res.status === 200) {
         setUser(null);
-        toast.success("Sesión cerrada, ¡Adiós!");
+        toast.success("Sesión cerrada, ¡Adiós!", { id: idToast });
         navigate("/");
       }
     } catch (error) {

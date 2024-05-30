@@ -122,7 +122,12 @@ const loginUser = async (req, res) => {
         });
       }
       jwt.sign(
-        { email: user.email, id: user._id, username: user.username, role: user.role },
+        {
+          email: user.email,
+          id: user._id,
+          username: user.username,
+          role: user.role,
+        },
         process.env.JWT_SECRET,
         {},
         (err, token) => {
@@ -158,7 +163,7 @@ const getProfile = async (req, res) => {
         res.json(null);
       }
     } catch (error) {
-      res.clearCookie('token');
+      res.clearCookie("token");
       res.json(null);
     }
   } else {
@@ -169,11 +174,6 @@ const getProfile = async (req, res) => {
 const logoutUser = async (req, res) => {
   res.clearCookie("token");
   res.status(200).json({ status: "success!" });
-
-  /*res.cookie("token", "", { expires: new Date(0), httpOnly: true });
-  res.status(200).json({ status: "success" });
-  res.end();
-  */
 };
 
 const verifyEmailToken = async (req, res) => {

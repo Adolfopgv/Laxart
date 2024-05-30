@@ -41,6 +41,14 @@ const userSchema = new Schema(
       ref: "Cart",
     },
     shippingAddress: {
+      name: {
+        type: String,
+        trim: true,
+      },
+      surname: {
+        type: String,
+        trim: true,
+      },
       address1: {
         type: String,
         trim: true,
@@ -66,6 +74,14 @@ const userSchema = new Schema(
       },
     },
     billingAddress: {
+      name: {
+        type: String,
+        trim: true,
+      },
+      surname: {
+        type: String,
+        trim: true,
+      },
       address1: {
         type: String,
         trim: true,

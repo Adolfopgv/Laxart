@@ -5,7 +5,7 @@ const ShopMenuComponent = (props) => {
   return (
     <ul className={`menu menu-horizontal ${props.showHide}`}>
       <li>
-        <details className={`flex justify-center ${props.margin}`}>
+        <details className={`flex justify-center ${props.margin} z-50`}>
           <summary className={`btn btn-ghost ${props.padding}`}>Tienda</summary>
           <ul className="p-2 bg-accent rounded-t-none">
             <li>

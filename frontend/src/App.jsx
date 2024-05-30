@@ -17,7 +17,7 @@ import {
   EmailVerification,
   AdminDashboard,
   AdminProducts,
-  Checkout,
+  Wrapper,
 } from "./Routes";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
@@ -61,7 +61,7 @@ export default function App() {
               path="/admin-dashboard/products"
               element={<AdminProducts />}
             />
-            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/checkout" element={<Wrapper />} />
             <Route path="/*" element={<Error />} />
           </Routes>
           <Footer />

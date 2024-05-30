@@ -46,6 +46,8 @@ export default function Login() {
 
   const loginUser = async (e) => {
     e.preventDefault();
+    const idToast = toast.loading("Iniciando sesión...");
+
     const { email, password, role, verified } = data;
     try {
       const { data } = await axios.post("/login", {
@@ -56,22 +58,22 @@ export default function Login() {
       });
 
       if (data.error) {
-        toast.error(data.error);
+        toast.error(data.error, { id: idToast });
       } else if (data.role !== 1 && data.verified) {
-        toast.success(`Bienvenido ${data.username}!`);
+        toast.success(`Bienvenido ${data.username}!`, { id: idToast });
         setUser(data.user);
         setData({});
         navigate("/");
       } else if (data.role === 1) {
-        toast.success(`Bienvenido admin ${email}`);
+        toast.success(`Bienvenido admin ${email}`, { id: idToast });
         setUser(data.user);
         setData({});
         navigate("/admin-dashboard");
       } else {
-        toast.error(data.message);
+        toast.error(data.message, { id: idToast });
       }
     } catch (error) {
-      toast.error("Error al iniciar sesión");
+      toast.error("Error al iniciar sesión", { id: idToast });
     }
   };
 

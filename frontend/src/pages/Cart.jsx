@@ -12,35 +12,39 @@ export default function Cart() {
     useContext(CartContext);
 
   const deleteCartProduct = async (productId) => {
+    const idToast = toast.loading("Quitando producto del carrito...");
+
     try {
       const response = await axios.delete(
         `/remove-from-cart/${user._id}/${productId}`
       );
 
       if (!response.data.error) {
-        toast.success(response.data.message);
+        toast.success(response.data.message, { id: idToast });
         setCartChanged((val) => !val);
       } else {
-        toast.error(response.data.error);
+        toast.error(response.data.error, { id: idToast });
       }
     } catch (error) {
-      toast.error("Error del servidor");
+      toast.error("Error del servidor", { id: idToast });
     }
   };
 
   const addCartProduct = async (productId) => {
+    const idToast = toast.loading("Añadiendo producto al carrito...");
+
     try {
       const response = await axios.post(
         `/add-to-cart/${user._id}/${productId}`
       );
       if (!response.data.error) {
-        toast.success(response.data.message);
+        toast.success(response.data.message, { id: idToast });
         setCartChanged((val) => !val);
       } else {
-        toast.error(response.data.error);
+        toast.error(response.data.error, { id: idToast });
       }
     } catch (error) {
-      toast.error("Error del servidor");
+      toast.error("Error del servidor", { id: idToast });
     }
   };
 

@@ -15,6 +15,8 @@
     "@mui/icons-material": "^5.15.17",
     "@mui/material": "^5.15.17",
     "@react-oauth/google": "^0.12.1",
+    "@stripe/react-stripe-js": "^2.7.1",
+    "@stripe/stripe-js": "^3.4.1",
     "axios": "^1.6.8",
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",

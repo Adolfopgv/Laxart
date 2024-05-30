@@ -12,7 +12,7 @@ import EmailVerification from "./pages/error/EmailVerification.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import AdminProducts from "./pages/admin/AdminProducts.jsx";
 import Product from "./pages/Product.jsx";
-import Checkout from "./pages/Checkout.jsx";
+import { Wrapper } from "./pages/Checkout.jsx";
 
 export {
     Login,
@@ -29,5 +29,5 @@ export {
     EmailVerification,
     AdminDashboard,
     AdminProducts,
-    Checkout
+    Wrapper
 };
