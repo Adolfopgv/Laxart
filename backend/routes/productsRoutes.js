@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const cors = require("cors");
 const {
   uploadProduct,
   getProducts,
@@ -8,13 +7,6 @@ const {
   updateProduct,
   getProductById,
 } = require("../controllers/productsController");
-
-router.use(
-  cors({
-    credentials: true,
-    origin: `${process.env.BASE_URL}`,
-  })
-);
 
 router.post("/upload-product", uploadProduct);
 router.get("/get-products", getProducts);

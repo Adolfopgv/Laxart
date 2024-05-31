@@ -7,6 +7,13 @@ const app = express();
 app.disable("x-powered-by");
 const bodyParser = require("body-parser");
 
+app.use(
+  cors({
+    credentials: true,
+    origin: `${process.env.BASE_URL}`,
+  })
+);
+
 // middleware
 app.use(cookieParser());
 app.use(express.urlencoded({ extend: false }));
@@ -18,6 +25,7 @@ app.use("/", require("./routes/authRoutes"));
 app.use("/", require("./routes/productsRoutes"));
 app.use("/", require("./routes/cartRoutes"));
 app.use("/", require("./routes/userRoutes"));
+app.use("/", require("./routes/checkoutRoutes"));
 
 const port = process.env.PORT;
 app.listen(port, () =>

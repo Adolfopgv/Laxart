@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const cors = require("cors");
 const {
   registerUser,
   loginUser,
@@ -8,13 +7,6 @@ const {
   logoutUser,
   verifyEmailToken,
 } = require("../controllers/authController");
-
-router.use(
-  cors({
-    credentials: true,
-    origin: `${process.env.BASE_URL}`,
-  })
-);
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);

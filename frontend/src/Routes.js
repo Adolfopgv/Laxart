@@ -12,22 +12,24 @@ import EmailVerification from "./pages/error/EmailVerification.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import AdminProducts from "./pages/admin/AdminProducts.jsx";
 import Product from "./pages/Product.jsx";
-import { Wrapper } from "./pages/Checkout.jsx";
+import { Wrapper } from "./pages/checkout/Checkout.jsx";
+import OrderFinished from "./pages/checkout/OrderFinished.jsx";
 
 export {
-    Login,
-    Home,
-    Register,
-    About,
-    Profile,
-    Cart,
-    Contact,
-    News,
-    Store,
-    Product,
-    Error,
-    EmailVerification,
-    AdminDashboard,
-    AdminProducts,
-    Wrapper
+  Login,
+  Home,
+  Register,
+  About,
+  Profile,
+  Cart,
+  Contact,
+  News,
+  Store,
+  Product,
+  Error,
+  EmailVerification,
+  AdminDashboard,
+  AdminProducts,
+  Wrapper,
+  OrderFinished,
 };
