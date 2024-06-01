@@ -25,7 +25,7 @@ app.use("/", require("./routes/authRoutes"));
 app.use("/", require("./routes/productsRoutes"));
 app.use("/", require("./routes/cartRoutes"));
 app.use("/", require("./routes/userRoutes"));
-app.use("/", require("./routes/checkoutRoutes"));
+app.use("/", require("./routes/orderRoutes"));
 
 const port = process.env.PORT;
 app.listen(port, () =>

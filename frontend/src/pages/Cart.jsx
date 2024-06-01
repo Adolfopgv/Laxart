@@ -118,16 +118,13 @@ export default function Cart() {
             <p className="text-lg font-medium m-10">Total:</p>
             <p className="text-2xl font-bold m-10">{totalPrice.toFixed(2)}€</p>
           </div>
-          <div className="flex flex-col gap-4 mt-4 md:flex-row md:justify-end">
-            <button
-              className="w-full md:w-auto btn btn-outline"
-              variant="outline"
-            >
-              <Link to="/store/all">Volver a la tienda</Link>
-            </button>
-            <button className="w-full md:w-auto btn btn-accent">
-              <Link to="/checkout">Comprar</Link>
-            </button>
+          <div className="flex flex-col-reverse gap-4 mt-4 md:flex-row md:justify-end">
+            <Link to="/store/all" className="w-full md:w-auto btn btn-outline">
+              Volver a la tienda
+            </Link>
+            <Link to="/checkout" className="w-full md:w-auto btn btn-accent">
+              Comprar
+            </Link>
           </div>
         </div>
       ) : (

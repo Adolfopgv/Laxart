@@ -79,8 +79,22 @@ const getCartProducts = async (req, res) => {
   }
 };
 
+const removeAllProducts = async (req, res) => {
+  try {
+    const userId = req.params.userid;
+    const cart = await Cart.findOne({ userId });
+
+    if (cart) {
+      cart.products.remove();
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error al borrar el carrito" });
+  }
+};
+
 module.exports = {
   addToCart,
   removeFromCart,
   getCartProducts,
+  removeAllProducts,
 };

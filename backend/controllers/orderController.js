@@ -25,4 +25,11 @@ const checkoutOrder = async (req, res) => {
   }
 };
 
-module.exports = { checkoutOrder };
+const registerOrder = async (req, res) => {
+  try {
+    const userId = req.params.userid;
+    const productId = req.params.productid;
+  } catch (error) {}
+};
+
+module.exports = { checkoutOrder, registerOrder };

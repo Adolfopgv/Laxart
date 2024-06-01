@@ -106,16 +106,18 @@ const Checkout = () => {
         if (!error) {
           const { id } = paymentMethod;
           const priceInCents = Math.round(totalPrice * 100);
-          const { data } = await axios.post("/checkout", {
+          const { data } = await axios.post("/checkout-order", {
             id,
             amount: priceInCents,
           });
           elements.getElement(CardElement).clear();
           if (!data.error) {
             toast.success(data.message, { id: idToast2 });
-            
-            // Borrar carrito
+
             // Guardar pedido en base de datos
+
+            // Borrar carrito
+            // await axios.delete(`/remove-all-cart/${user._id}`);
 
             navigate("/order-finished");
           } else {
