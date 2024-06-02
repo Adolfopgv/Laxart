@@ -37,8 +37,11 @@ export default function Login() {
     role: "",
     verified: "",
   });
-
   const [passwordEye, setPasswordEye] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
 
   const handlePasswordShow = () => {
     setPasswordEye(!passwordEye);
@@ -59,6 +62,22 @@ export default function Login() {
 
       if (data.error) {
         toast.error(data.error, { id: idToast });
+        switch (data.error) {
+          case "No puedes dejar espacios en blanco":
+            setEmailError(true);
+            setEmailErrorMessage(data.error);
+            setPasswordError(true);
+            setPasswordErrorMessage(data.error);
+            break;
+          case "El correo es requerido":
+            setEmailError(true);
+            setEmailErrorMessage(data.error);
+            break;
+          case "La contraseña es requerida":
+            setPasswordError(true);
+            setPasswordErrorMessage(data.error);
+            break;
+        }
       } else if (data.role !== 1 && data.verified) {
         toast.success(`Bienvenido ${data.username}!`, { id: idToast });
         setUser(data.user);
@@ -99,18 +118,25 @@ export default function Login() {
                       type="email"
                       placeholder="Correo..."
                       value={data.email}
-                      onChange={(e) =>
-                        setData({ ...data, email: e.target.value })
-                      }
+                      onChange={(e) => {
+                        setData({ ...data, email: e.target.value });
+                        setEmailError(false);
+                      }}
                     />
+                    {emailError && (
+                      <span className="text-error ml-2">
+                        {emailErrorMessage}
+                      </span>
+                    )}
                     <TextBoxWithTextOnTop
                       text="Contraseña"
                       type={passwordEye ? "text" : "password"}
                       placeholder="Contraseña..."
                       value={data.password}
-                      onChange={(e) =>
-                        setData({ ...data, password: e.target.value })
-                      }
+                      onChange={(e) => {
+                        setData({ ...data, password: e.target.value });
+                        setPasswordError(false);
+                      }}
                       eye={
                         <div>
                           {passwordEye === false ? (
@@ -121,6 +147,11 @@ export default function Login() {
                         </div>
                       }
                     />
+                    {passwordError && (
+                      <span className="text-error ml-2">
+                        {passwordErrorMessage}
+                      </span>
+                    )}
                   </div>
                   <div className="text-right link-info">
                     <Link to="/forgot-password">

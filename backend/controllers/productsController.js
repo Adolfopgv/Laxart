@@ -81,9 +81,12 @@ const getProductById = async (req, res) => {
   try {
     const productId = req.params.id;
     const product = await Product.findById(productId);
-    res.status(200).json(product);
+    if (product) {
+      res.status(200).json(product);
+    } else {
+      return res.json({ error: "No hay un producto con esta id" });
+    }
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Error del servidor" });
   }
 };

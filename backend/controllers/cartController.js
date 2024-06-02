@@ -9,7 +9,7 @@ const addToCart = async (req, res) => {
       return res.json({ error: "Error al añadir producto" });
     }
 
-    const cart = await Cart.findOne({ userId });
+    const cart = await Cart.findOne({ userId: userId });
 
     if (!cart) {
       await Cart.create({
@@ -70,9 +70,9 @@ const getCartProducts = async (req, res) => {
 
     const products = await Cart.findOne({ userId: userId });
     if (products) {
-      res.json(products.products);
+      return res.json(products.products);
     } else {
-      res.json({ error: "No hay un carrito para este usuario" });
+      return res.json({ error: "No hay un carrito para este usuario" });
     }
   } catch (error) {
     res.status(500).json({ error: "Error al recoger productos" });
@@ -82,10 +82,12 @@ const getCartProducts = async (req, res) => {
 const removeAllProducts = async (req, res) => {
   try {
     const userId = req.params.userid;
-    const cart = await Cart.findOne({ userId });
+    const cart = await Cart.findOne({ userId: userId });
 
     if (cart) {
-      cart.products.remove();
+      cart.products = [];
+      await cart.save();
+      res.status(200).json({ message: "Carrito eliminado" });
     }
   } catch (error) {
     res.status(500).json({ error: "Error al borrar el carrito" });

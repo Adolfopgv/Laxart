@@ -19,6 +19,8 @@ import {
   AdminProducts,
   Wrapper,
   OrderFinished,
+  AdminOrders,
+  AdminCustomers,
 } from "./Routes";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
@@ -61,6 +63,11 @@ export default function App() {
             <Route
               path="/admin-dashboard/products"
               element={<AdminProducts />}
+            />
+            <Route path="/admin-dashboard/orders" element={<AdminOrders />} />
+            <Route
+              path="/admin-dashboard/customers"
+              element={<AdminCustomers />}
             />
             <Route path="/checkout" element={<Wrapper />} />
             <Route path="/order-finished" element={<OrderFinished />} />

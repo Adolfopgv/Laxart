@@ -14,6 +14,8 @@ import AdminProducts from "./pages/admin/AdminProducts.jsx";
 import Product from "./pages/Product.jsx";
 import { Wrapper } from "./pages/checkout/Checkout.jsx";
 import OrderFinished from "./pages/checkout/OrderFinished.jsx";
+import AdminOrders from "./pages/admin/AdminOrders.jsx";
+import AdminCustomers from "./pages/admin/AdminCustomers.jsx";
 
 export {
   Login,
@@ -32,4 +34,6 @@ export {
   AdminProducts,
   Wrapper,
   OrderFinished,
+  AdminOrders,
+  AdminCustomers,
 };

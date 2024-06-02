@@ -9,6 +9,15 @@ import TextBoxWithTextOnTop from "../../components/TextBoxWithTextOnTop";
 export default function Register() {
   const [passwordEye, setPasswordEye] = useState(false);
   const [confirmPasswordEye, setConfirmPasswordEye] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [userError, setUserError] = useState(false);
+  const [userErrorMessage, setUserErrorMessage] = useState("");
+  const [repeatPasswordError, setRepeatPasswordError] = useState(false);
+  const [repeatPasswordErrorMessage, setRepeatPasswordErrorMessage] =
+    useState("");
 
   const handlePasswordShow = () => {
     setPasswordEye(!passwordEye);
@@ -29,6 +38,10 @@ export default function Register() {
 
   const registerUser = async (e) => {
     e.preventDefault();
+    setEmailError(false);
+    setPasswordError(false);
+    setUserError(false);
+    setRepeatPasswordError(false);
     const idToast = toast.loading("Registrando usuario...");
 
     const { username, email, password, repeatPassword } = data;
@@ -42,6 +55,33 @@ export default function Register() {
 
       if (response.data.error) {
         toast.error(response.data.error, { id: idToast });
+        switch (response.data.error) {
+          case "No puedes dejar espacios en blanco":
+            setEmailError(true);
+            setEmailErrorMessage(response.data.error);
+            setPasswordError(true);
+            setPasswordErrorMessage(response.data.error);
+            setUserError(true);
+            setUserErrorMessage(response.data.error);
+            setRepeatPasswordError(true);
+            setRepeatPasswordErrorMessage(response.data.error);
+            break;
+          case "El correo es requerido" || "Este correo ya está en uso":
+            setEmailError(true);
+            setEmailErrorMessage(response.data.error);
+            break;
+          case "La contraseña es requerida y debe tener al menos 6 caracteres" ||
+            "La contraseña debe contener al menos una mayúscula, una minúscula y un número":
+            setPasswordError(true);
+            setPasswordErrorMessage(response.data.error);
+            break;
+          case "Las contraseñas no coinciden":
+            setPasswordError(true);
+            setPasswordErrorMessage(response.data.error);
+            setRepeatPasswordError(true);
+            setRepeatPasswordErrorMessage(response.data.error);
+            break;
+        }
       } else {
         setData({});
         toast.success(
@@ -86,27 +126,40 @@ export default function Register() {
                       type="email"
                       placeholder="Correo..."
                       value={data.email}
-                      onChange={(e) =>
-                        setData({ ...data, email: e.target.value })
-                      }
+                      onChange={(e) => {
+                        setData({ ...data, email: e.target.value });
+                        setEmailError(false);
+                      }}
                     />
+                    {emailError && (
+                      <span className="text-error ml-2">
+                        {emailErrorMessage}
+                      </span>
+                    )}
                     <TextBoxWithTextOnTop
                       text="Usuario"
                       type="text"
                       placeholder="Usuario..."
                       value={data.username}
-                      onChange={(e) =>
-                        setData({ ...data, username: e.target.value })
-                      }
+                      onChange={(e) => {
+                        setData({ ...data, username: e.target.value });
+                        setUserError(false);
+                      }}
                     />
+                    {userError && (
+                      <span className="text-error ml-2">
+                        {userErrorMessage}
+                      </span>
+                    )}
                     <TextBoxWithTextOnTop
                       text="Contraseña"
                       type={passwordEye === false ? "password" : "text"}
                       placeholder="Contraseña..."
                       value={data.password}
-                      onChange={(e) =>
-                        setData({ ...data, password: e.target.value })
-                      }
+                      onChange={(e) => {
+                        setData({ ...data, password: e.target.value });
+                        setPasswordError(false);
+                      }}
                       eye={
                         <div>
                           {passwordEye === false ? (
@@ -117,15 +170,20 @@ export default function Register() {
                         </div>
                       }
                     />
-
+                    {passwordError && (
+                      <span className="text-error ml-2">
+                        {passwordErrorMessage}
+                      </span>
+                    )}
                     <TextBoxWithTextOnTop
                       text="Repetir contraseña"
                       type={confirmPasswordEye === false ? "password" : "text"}
                       placeholder="Repetir contraseña..."
                       value={data.repeatPassword}
-                      onChange={(e) =>
-                        setData({ ...data, repeatPassword: e.target.value })
-                      }
+                      onChange={(e) => {
+                        setData({ ...data, repeatPassword: e.target.value });
+                        setRepeatPasswordError(false);
+                      }}
                       eye={
                         <div>
                           {confirmPasswordEye === false ? (
@@ -138,6 +196,11 @@ export default function Register() {
                         </div>
                       }
                     />
+                    {repeatPasswordError && (
+                      <span className="text-error ml-2">
+                        {repeatPasswordErrorMessage}
+                      </span>
+                    )}
                   </div>
                   <button
                     type="submit"

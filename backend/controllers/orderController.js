@@ -1,4 +1,5 @@
 const Stripe = require("stripe");
+const Order = require("../models/orderModel");
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const checkoutOrder = async (req, res) => {
@@ -28,8 +29,27 @@ const checkoutOrder = async (req, res) => {
 const registerOrder = async (req, res) => {
   try {
     const userId = req.params.userid;
-    const productId = req.params.productid;
-  } catch (error) {}
+    const products = req.body.products;
+
+    if (!userId || !products || !products.length) {
+      return res.status(400).json({
+        error: "Faltan datos necesarios para realizar el pedido",
+      });
+    }
+
+    const newOrder = new Order({
+      userId,
+      items: products.map((product) => ({
+        product: product.productId,
+        quantity: product.quantity,
+      })),
+    });
+    await newOrder.save();
+
+    res.status(200).json({ message: "Pedido realizado con éxito" });
+  } catch (error) {
+    res.status(500).json({ error: "Error al realizar el pedido" });
+  }
 };
 
 module.exports = { checkoutOrder, registerOrder };

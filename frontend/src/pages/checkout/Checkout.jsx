@@ -24,11 +24,10 @@ export const Wrapper = () => (
 const Checkout = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const { totalPrice, products } = useContext(CartContext);
+  const { totalPrice, products, setCartChanged } = useContext(CartContext);
   const [button, setButton] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState();
   const [showCardForm, setShowCardForm] = useState(false);
-  const [showEditForm, setShowEditForm] = useState(false);
   const [shippingDetails, setShippingDetails] = useState({
     name: "",
     surname: "",
@@ -114,12 +113,22 @@ const Checkout = () => {
           if (!data.error) {
             toast.success(data.message, { id: idToast2 });
 
-            // Guardar pedido en base de datos
+            const response = await axios.post(`/register-order/${user._id}`, {
+              products: products.map((product) => ({
+                productId: product._id,
+                quantity: product.quantity,
+              })),
+            });
+            if (!response.data.error) {
+              const deleteCart = await axios.delete(
+                `/remove-all-cart/${user._id}`
+              );
 
-            // Borrar carrito
-            // await axios.delete(`/remove-all-cart/${user._id}`);
-
-            navigate("/order-finished");
+              if (!deleteCart.data.error) {
+                setCartChanged((val) => !val);
+                navigate("/order-finished");
+              }
+            }
           } else {
             toast.error(data.error, { id: idToast2 });
             setButton(true);
@@ -149,155 +158,110 @@ const Checkout = () => {
                   <span className="text-3xl">Detalles de envio</span>
                 </div>
                 <div className="card-body mt-4">
-                  {showEditForm ? (
-                    <div className="grid gap-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <TextBoxWithTextOnTop
-                          text="Nombre"
-                          type="text"
-                          placeholder="John Doe"
-                          value={shippingDetails.name}
-                          onChange={(e) =>
-                            setShippingDetails({
-                              ...shippingDetails,
-                              name: e.target.value,
-                            })
-                          }
-                        />
-                        <TextBoxWithTextOnTop
-                          text="Apellidos"
-                          type="text"
-                          placeholder="John Doe"
-                          value={shippingDetails.surname}
-                          onChange={(e) =>
-                            setShippingDetails({
-                              ...shippingDetails,
-                              surname: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
+                  <div className="grid gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <TextBoxWithTextOnTop
-                        text="Dirección 1"
+                        text="Nombre"
                         type="text"
-                        placeholder="123 Main St, Anytown USA"
-                        value={shippingDetails.address1}
+                        placeholder="John Doe"
+                        value={shippingDetails.name}
                         onChange={(e) =>
                           setShippingDetails({
                             ...shippingDetails,
-                            address1: e.target.value,
+                            name: e.target.value,
                           })
                         }
                       />
                       <TextBoxWithTextOnTop
-                        text="Dirección 2 (opcional)"
+                        text="Apellidos"
                         type="text"
-                        placeholder="123 Main St, Anytown USA"
-                        value={shippingDetails.address2}
+                        placeholder="John Doe"
+                        value={shippingDetails.surname}
                         onChange={(e) =>
                           setShippingDetails({
                             ...shippingDetails,
-                            address2: e.target.value,
+                            surname: e.target.value,
                           })
                         }
                       />
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <TextBoxWithTextOnTop
-                          text="País"
-                          placeholder="Anytown"
-                          type="text"
-                          value={shippingDetails.country}
-                          onChange={(e) =>
-                            setShippingDetails({
-                              ...shippingDetails,
-                              country: e.target.value,
-                            })
-                          }
-                        />
-                        <TextBoxWithTextOnTop
-                          text="Provincia"
-                          placeholder="CA"
-                          type="text"
-                          value={shippingDetails.province}
-                          onChange={(e) =>
-                            setShippingDetails({
-                              ...shippingDetails,
-                              province: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <TextBoxWithTextOnTop
-                          text="Localidad"
-                          type="text"
-                          placeholder="12345"
-                          value={shippingDetails.locality}
-                          onChange={(e) =>
-                            setShippingDetails({
-                              ...shippingDetails,
-                              locality: e.target.value,
-                            })
-                          }
-                        />
-                        <TextBoxWithTextOnTop
-                          text="Código Postal"
-                          type="number"
-                          placeholder="United States"
-                          value={shippingDetails.postalCode}
-                          onChange={(e) =>
-                            setShippingDetails({
-                              ...shippingDetails,
-                              postalCode: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                      <button
-                        className="btn btn-accent w-full py-2"
-                        onClick={() => setShowEditForm(false)}
-                      >
-                        Guardar
-                      </button>
                     </div>
-                  ) : (
-                    <div>
-                      <p>
-                        <strong>Nombre:</strong> {shippingDetails.name}
-                      </p>
-                      <p>
-                        <strong>Apellidos:</strong> {shippingDetails.surname}
-                      </p>
-                      <p>
-                        <strong>Dirección 1:</strong> {shippingDetails.address1}
-                      </p>
-                      {shippingDetails.address2 && (
-                        <p>
-                          <strong>Dirección 2:</strong>{" "}
-                          {shippingDetails.address2}
-                        </p>
-                      )}
-                      <p>
-                        <strong>País:</strong> {shippingDetails.country}
-                      </p>
-                      <p>
-                        <strong>Provincia:</strong> {shippingDetails.province}
-                      </p>
-                      <p>
-                        <strong>Localidad:</strong> {shippingDetails.locality}
-                      </p>
-                      <p>
-                        <strong>Código Postal:</strong>{" "}
-                        {shippingDetails.postalCode}
-                      </p>
-                      <button
-                        className="btn btn-accent w-full py-2 mt-4"
-                        onClick={() => setShowEditForm(true)}
-                      >
-                        Editar
-                      </button>
+                    <TextBoxWithTextOnTop
+                      text="Dirección 1"
+                      type="text"
+                      placeholder="123 Main St, Anytown USA"
+                      value={shippingDetails.address1}
+                      onChange={(e) =>
+                        setShippingDetails({
+                          ...shippingDetails,
+                          address1: e.target.value,
+                        })
+                      }
+                    />
+                    <TextBoxWithTextOnTop
+                      text="Dirección 2 (opcional)"
+                      type="text"
+                      placeholder="123 Main St, Anytown USA"
+                      value={shippingDetails.address2}
+                      onChange={(e) =>
+                        setShippingDetails({
+                          ...shippingDetails,
+                          address2: e.target.value,
+                        })
+                      }
+                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <TextBoxWithTextOnTop
+                        text="País"
+                        placeholder="Anytown"
+                        type="text"
+                        value={shippingDetails.country}
+                        onChange={(e) =>
+                          setShippingDetails({
+                            ...shippingDetails,
+                            country: e.target.value,
+                          })
+                        }
+                      />
+                      <TextBoxWithTextOnTop
+                        text="Provincia"
+                        placeholder="CA"
+                        type="text"
+                        value={shippingDetails.province}
+                        onChange={(e) =>
+                          setShippingDetails({
+                            ...shippingDetails,
+                            province: e.target.value,
+                          })
+                        }
+                      />
                     </div>
-                  )}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <TextBoxWithTextOnTop
+                        text="Localidad"
+                        type="text"
+                        placeholder="12345"
+                        value={shippingDetails.locality}
+                        onChange={(e) =>
+                          setShippingDetails({
+                            ...shippingDetails,
+                            locality: e.target.value,
+                          })
+                        }
+                      />
+                      <TextBoxWithTextOnTop
+                        text="Código Postal"
+                        type="number"
+                        placeholder="United States"
+                        value={shippingDetails.postalCode}
+                        onChange={(e) =>
+                          setShippingDetails({
+                            ...shippingDetails,
+                            postalCode: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className="card p-4 shadow-lg rounded-lg bg-base-100">

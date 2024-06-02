@@ -1,27 +1,34 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const orderSchema = new Schema({
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-  status: {
-    type: String,
-    default: "Sin confirmar",
-  },
-  items: [
-    {
-      productId: {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-      },
+const orderSchema = new Schema(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-  ],
-  totalPrice: {
-    type: Number,
+    status: {
+      type: String,
+      default: "Sin confirmar",
+    },
+    items: [
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: "Product",
+        },
+        quantity: {
+          type: Number,
+        },
+      },
+    ],
+    totalPrice: {
+      type: Number,
+    },
   },
-});
+  { timestamps: true }
+);
 
 const OrderModel = mongoose.model("Order", orderSchema);
 

@@ -53,8 +53,8 @@ export default function Cart() {
       {user ? (
         <div className="flex flex-col m-16">
           <h1 className="text-3xl m-5">{quantity} Productos</h1>
-          {products ? (
-            products?.map((product) => (
+          {products.length > 0 ? (
+            products.map((product) => (
               <div className="flex flex-col" key={product._id}>
                 <div className="flex flex-row lg:items-center gap-4 border-b p-5 border-secondary max-lg:flex-col">
                   <img
@@ -106,13 +106,18 @@ export default function Cart() {
                         </svg>
                       </button>
                     </div>
-                    <div className="text-lg font-bold">{product.price}€</div>
+                    <div className="text-lg font-bold">
+                      {(product.price * product.quantity).toFixed(2)}€
+                    </div>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <span>No hay productos</span>
+            <span className="text-lg m-5">
+              No hay productos, vuelva a la tienda para añadir algún producto al
+              carrito
+            </span>
           )}
           <div className="flex items-center justify-between border-t pt-4 border-accent">
             <p className="text-lg font-medium m-10">Total:</p>
@@ -122,7 +127,12 @@ export default function Cart() {
             <Link to="/store/all" className="w-full md:w-auto btn btn-outline">
               Volver a la tienda
             </Link>
-            <Link to="/checkout" className="w-full md:w-auto btn btn-accent">
+            <Link
+              to="/checkout"
+              className={`w-full md:w-auto btn btn-accent ${
+                products.length === 0 ? "btn-disabled" : ""
+              }`}
+            >
               Comprar
             </Link>
           </div>

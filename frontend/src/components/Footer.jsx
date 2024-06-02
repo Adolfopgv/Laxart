@@ -32,5 +32,5 @@ export default function Footer() {
     </footer>
   );
 
-  return <>{user && user.role !== 1 ? footer : <div></div>}</>;
+  return <>{user ? (user.role !== 1 ? footer : "" ) : (footer)}</>;
 }

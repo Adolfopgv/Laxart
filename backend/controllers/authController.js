@@ -89,9 +89,19 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     // Ckeck if email and password are entered
-    if (!email || !password) {
+    if (!email && !password) {
       return res.json({
         error: "No puedes dejar espacios en blanco",
+      });
+    }
+    if (!email) {
+      return res.json({
+        error: "El correo es requerido",
+      });
+    }
+    if (!password) {
+      return res.json({
+        error: "La contraseña es requerida",
       });
     }
 
