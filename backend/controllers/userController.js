@@ -94,4 +94,20 @@ const getShippingAddress = async (req, res) => {
   }
 };
 
-module.exports = { updateAddresses, getShippingAddress };
+const getUser = async (req, res) => {
+  try {
+    const userId = req.params.userid;
+    const user = await User.findById(userId);
+
+    if (user) {
+      return res.json(user);
+    } else {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+  } catch (error) {
+    console.error("Error al obtener el usuario:", error);
+    res.status(500).json({ error: "Error del servidor" });
+  }
+};
+
+module.exports = { updateAddresses, getShippingAddress, getUser };

@@ -11,12 +11,15 @@ export default function Cart() {
   const { setCartChanged, products, quantity, totalPrice } =
     useContext(CartContext);
 
-  const deleteCartProduct = async (productId) => {
+  const deleteCartProduct = async (productId, productType) => {
     const idToast = toast.loading("Quitando producto del carrito...");
 
     try {
       const response = await axios.delete(
-        `/remove-from-cart/${user._id}/${productId}`
+        `/remove-from-cart/${user._id}/${productId}`,
+        {
+          type: productType,
+        }
       );
 
       if (!response.data.error) {
@@ -25,17 +28,18 @@ export default function Cart() {
       } else {
         toast.error(response.data.error, { id: idToast });
       }
-    } catch (error) {
-      toast.error("Error del servidor", { id: idToast });
-    }
+    } catch (error) {}
   };
 
-  const addCartProduct = async (productId) => {
+  const addCartProduct = async (productId, productType) => {
     const idToast = toast.loading("Añadiendo producto al carrito...");
 
     try {
       const response = await axios.post(
-        `/add-to-cart/${user._id}/${productId}`
+        `/add-to-cart/${user._id}/${productId}`,
+        {
+          type: productType,
+        }
       );
       if (!response.data.error) {
         toast.success(response.data.message, { id: idToast });
@@ -54,8 +58,8 @@ export default function Cart() {
         <div className="flex flex-col m-16">
           <h1 className="text-3xl m-5">{quantity} Productos</h1>
           {products.length > 0 ? (
-            products.map((product) => (
-              <div className="flex flex-col" key={product._id}>
+            products.map((product, index) => (
+              <div className="flex flex-col" key={[product._id, index]}>
                 <div className="flex flex-row lg:items-center gap-4 border-b p-5 border-secondary max-lg:flex-col">
                   <img
                     alt={product.productName}
@@ -70,6 +74,7 @@ export default function Cart() {
                   />
                   <div className="flex flex-col gap-1 mr-16">
                     <h3 className="font-medium">{product.productName}</h3>
+                    <span>{product.type}</span>
                     <p className="text-sm tex-black">{product.description}</p>
                   </div>
                   <div className="flex flex-col items-end gap-4 ml-auto">
@@ -77,7 +82,9 @@ export default function Cart() {
                       {/** Boton restar */}
                       <button
                         className="btn btn-ghost"
-                        onClick={() => deleteCartProduct(product._id)}
+                        onClick={() =>
+                          deleteCartProduct(product._id, product.type)
+                        }
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -93,7 +100,9 @@ export default function Cart() {
                       {/** Boton sumar */}
                       <button
                         className="btn btn-ghost"
-                        onClick={() => addCartProduct(product._id)}
+                        onClick={() =>
+                          addCartProduct(product._id, product.type)
+                        }
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

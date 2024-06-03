@@ -52,4 +52,14 @@ const registerOrder = async (req, res) => {
   }
 };
 
-module.exports = { checkoutOrder, registerOrder };
+const getOrders = async (req, res) => {
+  try {
+    const orders = await Order.find();
+
+    if (orders) {
+      return res.json(orders);
+    }
+  } catch (error) {}
+};
+
+module.exports = { checkoutOrder, registerOrder, getOrders };

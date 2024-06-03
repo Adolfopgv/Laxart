@@ -4,29 +4,30 @@ const addToCart = async (req, res) => {
   try {
     const userId = req.params.userid;
     const productId = req.params.product;
+    const { type } = req.body;
 
     if (!userId || !productId) {
-      return res.json({ error: "Error al añadir producto" });
+      return res.status(400).json({ error: "Error al añadir producto" });
     }
 
-    const cart = await Cart.findOne({ userId: userId });
+    let cart = await Cart.findOne({ userId });
 
     if (!cart) {
-      await Cart.create({
+      cart = await Cart.create({
         userId,
-        products: [{ product: productId, quantity: 1 }],
+        products: [{ product: productId, quantity: 1, type: type }],
       });
       return res.status(200).json({ message: "Producto añadido al carrito" });
     }
 
-    const productInCart = cart.products.find(
-      (item) => item.product.toString() === productId
+    let productInCart = cart.products.find(
+      (item) => item.product.toString() === productId && item.type === type
     );
 
     if (productInCart) {
       productInCart.quantity += 1;
     } else {
-      cart.products.push({ product: productId, quantity: 1 });
+      cart.products.push({ product: productId, quantity: 1, type: type });
     }
 
     await cart.save();
@@ -41,12 +42,13 @@ const removeFromCart = async (req, res) => {
   try {
     const userId = req.params.userid;
     const productId = req.params.product;
+    const { type } = req.body;
 
     const cart = await Cart.findOne({ userId });
 
-    const productInCart = cart.products.find(
-      (item) => item.product.toString() === productId
-    );
+    const productInCart = cart.products.find((item) => {
+      item.product.toString() === productId && item.type === type;
+    });
 
     if (productInCart && productInCart.quantity > 1) {
       productInCart.quantity -= 1;

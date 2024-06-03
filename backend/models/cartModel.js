@@ -20,6 +20,9 @@ const cartSchema = new Schema(
           type: Number,
           default: 1,
         },
+        type: {
+          type: String,
+        },
       },
     ],
   },

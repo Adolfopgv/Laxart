@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import { CartContext } from "../context/cartContext";
@@ -13,17 +13,29 @@ export default function Product() {
   const { setCartChanged } = useContext(CartContext);
   const location = useLocation();
   const product = location.state?.product;
+  const [type, setType] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [typeError, setTypeError] = useState("");
 
   const addToCart = async () => {
     try {
-      const response = await axios.post(
-        `/add-to-cart/${user._id}/${product._id}`
-      );
-      if (response.data.error) {
-        toast.error(response.data.error);
+      if (type !== "") {
+        setTypeError(false);
+        const response = await axios.post(
+          `/add-to-cart/${user._id}/${product._id}`,
+          {
+            type: type,
+          }
+        );
+        if (response.data.error) {
+          toast.error(response.data.error);
+        } else {
+          toast.success(response.data.message);
+          setCartChanged((val) => !val);
+        }
       } else {
-        toast.success(response.data.message);
-        setCartChanged((val) => !val);
+        toast.error("Debes elegir un tipo primero");
+        setTypeError(true);
       }
     } catch (error) {
       toast.error(error.response.data.error);
@@ -55,6 +67,36 @@ export default function Product() {
                 </div>
               </div>
               <div className="text-4xl font-bold">{product.price}€</div>
+              <div className="flex flex-row items-center">
+                <span className="text-xl font-bold">Tipo: </span>
+                <details
+                  className="dropdown"
+                  open={(dropdownOpen) => !dropdownOpen}
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  <summary
+                    className={`m-1 btn bg-white ${typeError && "bg-error"}`}
+                  >
+                    {type ? type : typeError ? "¡Elije un tipo!" : "Tipo"}
+                  </summary>
+                  <ul className="p-2 shadow menu dropdown-content z-[1] bg-white rounded-box w-52">
+                    {product.types.map((type) => {
+                      return (
+                        <li
+                          key={type}
+                          onClick={() => {
+                            setType(type);
+                            setDropdownOpen(false);
+                            setTypeError(false);
+                          }}
+                        >
+                          <a>{type}</a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </details>
+              </div>
               <div className="text-lg leading-loose">
                 <p>{product.description}</p>
               </div>

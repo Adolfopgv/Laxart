@@ -46,7 +46,11 @@ export function CartContextProvider({ children }) {
                 `/get-product/${cartProduct.product}`
               );
               if (!response.data.error) {
-                return { ...response.data, quantity: cartProduct.quantity };
+                return {
+                  ...response.data,
+                  quantity: cartProduct.quantity,
+                  type: cartProduct.type,
+                };
               } else {
                 return null;
               }

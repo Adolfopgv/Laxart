@@ -10,12 +10,15 @@ const ShoppingCartComponent = () => {
   const { setCartChanged, products, quantity, totalPrice } =
     useContext(CartContext);
 
-  const deleteCartProduct = async (productId) => {
+  const deleteCartProduct = async (productId, productType) => {
     const idToast = toast.loading("Quitando producto del carrito...");
 
     try {
       const response = await axios.delete(
-        `/remove-from-cart/${user._id}/${productId}`
+        `/remove-from-cart/${user._id}/${productId}`,
+        {
+          type: productType,
+        }
       );
 
       if (!response.data.error) {
@@ -27,12 +30,15 @@ const ShoppingCartComponent = () => {
     } catch (error) {}
   };
 
-  const addCartProduct = async (productId) => {
+  const addCartProduct = async (productId, productType) => {
     const idToast = toast.loading("Añadiendo producto al carrito...");
 
     try {
       const response = await axios.post(
-        `/add-to-cart/${user._id}/${productId}`
+        `/add-to-cart/${user._id}/${productId}`,
+        {
+          type: productType,
+        }
       );
       if (!response.data.error) {
         toast.success(response.data.message, { id: idToast });
@@ -74,14 +80,13 @@ const ShoppingCartComponent = () => {
           <span className="font-bold text-lg">{quantity} Productos</span>
           <span className="text-black">Total: €{totalPrice.toFixed(2)}</span>
           <div className="card-actions overflow-auto max-h-96">
-            {products.map((product) => (
-              <div
-                key={product._id}
-                className="flex flex-row items-center mb-2"
-              >
+            {console.log(products)}
+            {products.map((product, index) => (
+              <div key={[product._id, index]} className="flex flex-row items-center mb-2">
                 <img src={product.image} className="w-16 h-16 mr-3" />
                 <div className="flex flex-col text-primary">
                   <span>{product.productName}</span>
+                  <span>Tipo: {product.type}</span>
                   <span>{(product.price * product.quantity).toFixed(2)}€</span>
                   <span>Cantidad: {product.quantity}</span>
                 </div>
@@ -89,7 +94,7 @@ const ShoppingCartComponent = () => {
                   {/** Boton restar */}
                   <button
                     className="btn btn-ghost"
-                    onClick={() => deleteCartProduct(product._id)}
+                    onClick={() => deleteCartProduct(product._id, product.type)}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -104,7 +109,7 @@ const ShoppingCartComponent = () => {
                   {/** Boton sumar */}
                   <button
                     className="btn btn-ghost"
-                    onClick={() => addCartProduct(product._id)}
+                    onClick={() => addCartProduct(product._id, product.type)}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
