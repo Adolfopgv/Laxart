@@ -48,6 +48,7 @@ const Checkout = () => {
         const response = await axios.get(`/users/${user._id}/shipping-details`);
         if (response.data && !response.data.error) {
           setShippingDetails(response.data);
+          console.log("shipping Details: ", response.data);
         }
       } catch (error) {
         console.error("Error fetching shipping details:", error);
@@ -83,6 +84,8 @@ const Checkout = () => {
       locality,
       postalCode,
     } = shippingDetails;
+
+    console.log("Envio: ", shippingDetails);
     try {
       const response = await axios.post(`/users/${user._id}/update-addresses`, {
         name,
@@ -95,8 +98,10 @@ const Checkout = () => {
         postalCode,
       });
 
+      console.log("envio actualizado: ", response.data);
       if (!response.data.error) {
         const idToast2 = toast.loading(response.data.message, { id: idToast1 });
+        setShippingDetails(response.data);
 
         const { error, paymentMethod } = await stripe.createPaymentMethod({
           type: "card",
@@ -114,11 +119,17 @@ const Checkout = () => {
           if (!data.error) {
             toast.success(data.message, { id: idToast2 });
 
-            const response = await axios.post(`/register-order/${user._id}`, {
+            const response = await axios.post("/register-order", {
+              user: user,
+              shippingDetails: shippingDetails,
               products: products.map((product) => ({
                 productId: product._id,
+                productName: product.productName,
                 quantity: product.quantity,
                 type: product.type,
+                price: product.price,
+                discount: product.discount,
+                image: product.image,
               })),
               totalPrice: totalPrice,
               itemsQuantity: quantity,
@@ -154,6 +165,7 @@ const Checkout = () => {
   return (
     <>
       <div className="flex flex-col min-h-screen bg-primary">
+        {console.log(user)}
         <main className="flex-1 py-8 md:py-12">
           <div className="container mx-auto px-4 md:px-6 grid gap-8 lg:grid-cols-[2fr_1fr]">
             <div className="space-y-8">

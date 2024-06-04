@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
-  const [orderDetails, setOrderDetails] = useState([]);
   const [currentOrder, setCurrentOrder] = useState(null);
   const [orderState, setOrderState] = useState(false);
   const { user } = useContext(UserContext);
@@ -24,66 +23,8 @@ export default function AdminOrders() {
     fetchOrders();
   }, [orderState]);
 
-  useEffect(() => {
-    const fetchOrderDetails = async () => {
-      try {
-        const details = await Promise.all(
-          orders.map(async (order) => {
-            const orderUser = await axios.get(`/users/${order.userId}`);
-
-            if (orderUser.data.error) {
-              console.error(
-                "Error al obtener detalles del usuario:",
-                orderUser.data.error
-              );
-              return null;
-            }
-
-            const productDetails = await Promise.all(
-              order.items.map(async (item) => {
-                const orderProduct = await axios.get(
-                  `/get-product/${item.product}`
-                );
-                if (orderProduct.data.error) {
-                  console.error(
-                    "Error al obtener detalles del producto:",
-                    orderProduct.data.error
-                  );
-                  return null;
-                }
-                return {
-                  ...orderProduct.data,
-                  quantity: item.quantity,
-                  type: item.type,
-                };
-              })
-            );
-            return {
-              user: orderUser.data,
-              products: productDetails,
-              orderId: order._id,
-              date: order.createdAt,
-              itemsQuantity: order.itemsQuantity,
-              status: order.status,
-              totalPrice: order.totalPrice,
-            };
-          })
-        );
-        setOrderDetails(details);
-
-        console.log("details: ", details);
-      } catch (error) {
-        console.error("Error al obtener detalles de la orden: ", error);
-      }
-    };
-
-    if (orders.length > 0) {
-      fetchOrderDetails();
-    }
-  }, [orders, orderState]);
-
-  const openModal = (orderDetail) => {
-    setCurrentOrder(orderDetail);
+  const openModal = (order) => {
+    setCurrentOrder(order);
     document.getElementById("my_modal_1").showModal();
   };
 
@@ -109,93 +50,82 @@ export default function AdminOrders() {
   return (
     <>
       {user && user.role === 1 ? (
-        <div className="flex justify-center m-10 overflow-y-auto overflow-x-auto overflow-hidden max-h-[650px] w-[100%]">
-          <table className="text-center font-light text-surface max-w-[100%] min-w-[75%]">
-            <caption className="caption-top mb-2">
-              <span className="card-title">Pedidos {orderDetails.length}</span>
-            </caption>
-            <thead className="border-b border-accent font-medium">
-              <tr>
-                <th scope="col" className="px-6 py-4">
-                  #
-                </th>
-                <th scope="col" className="px-6 py-4">
-                  Avatar
-                </th>
-                <th scope="col" className="px-6 py-4">
-                  Email
-                </th>
-                <th scope="col" className="px-6 py-4">
-                  Fecha de pedido
-                </th>
-                <th scope="col" className="px-6 py-4">
-                  Estado
-                </th>
-                <th scope="col" className="px-6 py-4">
-                  Total
-                </th>
-                <th scope="col" className="px-6 py-4"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {orderDetails?.map((orderDetail, index) => (
-                <tr key={index} className="border-b border-base-300">
-                  <td className="px-6 py-4 font-medium">{index + 1}</td>
-                  <td className="px-6 py-4">
-                    <div className="relative w-12 h-12">
-                      <img
-                        src={orderDetail.user.avatar}
-                        alt="Avatar"
-                        className="object-cover w-full h-full rounded-full"
-                      />
-                    </div>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    {orderDetail.user.email}
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    {new Date(orderDetail.date).toLocaleDateString("es-ES")}
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <div
-                      className={`${
-                        (orderDetail.status == "Sin confirmar" &&
-                          "bg-orange-400") ||
-                        (orderDetail.status == "Cancelado" && "bg-red-400") ||
-                        (orderDetail.status == "Enviado" && "bg-green-400") ||
-                        (orderDetail.status == "Confirmado" && "bg-blue-400")
-                      } rounded font-normal`}
+        <div className="flex justify-center m-10 overflow-y-auto overflow-x-auto overflow-hidden">
+          <div className="flex justify-center m-4 sm:m-10 overflow-x-auto w-full">
+            <div className="min-w-full overflow-x-auto w-full">
+              <table className="text-center font-light text-surface w-full">
+                <caption className="caption-top mb-2 text-lg">
+                  <span className="card-title">Pedidos {orders.length}</span>
+                </caption>
+                <thead className="border-b border-accent font-medium text-base sm:text-lg">
+                  <tr>
+                    <th scope="col" className="px-2 py-2 sm:px-6">
+                      #
+                    </th>
+                    <th scope="col" className="px-2 py-2 sm:px-6">
+                      Email
+                    </th>
+                    <th scope="col" className="px-2 py-2 sm:px-6">
+                      Fecha de pedido
+                    </th>
+                    <th scope="col" className="px-2 py-2 sm:px-6">
+                      Estado
+                    </th>
+                    <th scope="col" className="px-2 py-2 sm:px-6">
+                      Total
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="text-sm sm:text-base">
+                  {orders?.map((order, index) => (
+                    <tr
+                      key={index}
+                      className="border-b border-base-300 hover:bg-base-200 cursor-pointer"
+                      onClick={() => openModal(order)}
                     >
-                      {orderDetail.status}
-                    </div>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4 font-semibold">
-                    {orderDetail.totalPrice.toFixed(2)}€
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <button
-                      className="btn"
-                      onClick={() => openModal(orderDetail)}
-                    >
-                      Detalles
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                      <td className="px-2 py-2 sm:px-6 font-medium">
+                        {index + 1}
+                      </td>
+                      <td className="whitespace-nowrap px-2 py-2 sm:px-6">
+                        {order.user.email}
+                      </td>
+                      <td className="whitespace-nowrap px-2 py-2 sm:px-6">
+                        {new Date(order.createdAt).toLocaleDateString("es-ES")}
+                      </td>
+                      <td className="whitespace-nowrap px-2 py-2 sm:px-6">
+                        <div
+                          className={`${
+                            (order.status == "Sin confirmar" &&
+                              "bg-orange-400") ||
+                            (order.status == "Cancelado" && "bg-red-400") ||
+                            (order.status == "Enviado" && "bg-green-400") ||
+                            (order.status == "Confirmado" && "bg-blue-400")
+                          } rounded px-2 py-1 text-xs sm:text-sm font-normal`}
+                        >
+                          {order.status}
+                        </div>
+                      </td>
+                      <td className="whitespace-nowrap px-2 py-2 sm:px-6 font-semibold">
+                        {order.totalPrice.toFixed(2)}€
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
 
           <dialog id="my_modal_1" className="modal">
             <div className="modal-box">
               {currentOrder && (
                 <div>
                   <h3 className="font-bold text-lg flex flex-col">
-                    <span>Pedido {currentOrder.orderId}</span>
+                    <span>Pedido {currentOrder._id}</span>
                     <span className="text-sm">
                       Usuario: {currentOrder.user.username}
                     </span>
                   </h3>
-                  <div className="modal-action">
+                  <div className="m-2">
                     <form method="dialog">
                       <div className="flex flex-row">
                         <div className="flex flex-col">
@@ -206,26 +136,30 @@ export default function AdminOrders() {
                             Total: {currentOrder.totalPrice.toFixed(2)}€
                           </span>
                           <div className="grid grid-cols-2 gap-4">
-                            {currentOrder.products.map((product, index) => (
+                            {currentOrder.items.map((item, index) => (
                               <div key={index} className="flex flex-col">
-                                <img
-                                  src={product.image}
-                                  className="w-16 h-16 rounded-lg mb-2"
-                                  alt={product.productName}
-                                />
-                                <div className="flex flex-col">
-                                  <span className="font-semibold">
-                                    {product.productName}
-                                  </span>
-                                  <span>{product.type}</span>
-                                  <span>Cantidad: {product.quantity}</span>
-                                  <span className="font-semibold">
-                                    {(product.price * product.quantity).toFixed(
-                                      2
-                                    )}
-                                    €
-                                  </span>
-                                </div>
+                                {item !== null && (
+                                  <>
+                                    <img
+                                      src={item.image}
+                                      className="w-16 h-16 rounded-lg mb-2"
+                                      alt={item.productName}
+                                    />
+                                    <div className="flex flex-col">
+                                      <span className="font-semibold">
+                                        {item.productName}
+                                      </span>
+                                      <span>{item.type}</span>
+                                      <span>Cantidad: {item.quantity}</span>
+                                      <span className="font-semibold">
+                                        {(item.price * item.quantity).toFixed(
+                                          2
+                                        )}
+                                        €
+                                      </span>
+                                    </div>
+                                  </>
+                                )}
                               </div>
                             ))}
                           </div>
@@ -236,56 +170,53 @@ export default function AdminOrders() {
                             </span>
                             <span>
                               <span className="font-semibold">Nombre: </span>
-                              {currentOrder.user.shippingAddress.name}
+                              {currentOrder.shippingDetails.name}
                             </span>
                             <span>
                               <span className="font-semibold">Apellidos: </span>
-                              {currentOrder.user.shippingAddress.surname}
+                              {currentOrder.shippingDetails.surname}
                             </span>
                             <span>
                               <span className="font-semibold">
                                 Dirección 1:{" "}
                               </span>
-                              {currentOrder.user.shippingAddress.address1}
+                              {currentOrder.shippingDetails.address1}
                             </span>
                             <span>
-                              {currentOrder.user.shippingAddress.address2 && (
+                              {currentOrder.shippingDetails.address2 && (
                                 <>
                                   <span className="font-semibold">
                                     Dirección 2:{" "}
                                   </span>
-                                  {currentOrder.user.shippingAddress.address2}
+                                  {currentOrder.shippingDetails.address2}
                                 </>
                               )}
                             </span>
                             <span>
                               <span className="font-semibold">País: </span>
-                              {currentOrder.user.shippingAddress.country}
+                              {currentOrder.shippingDetails.country}
                             </span>
                             <span>
                               <span className="font-semibold">Localidad: </span>
-                              {currentOrder.user.shippingAddress.locality}
+                              {currentOrder.shippingDetails.locality}
                             </span>
                             <span>
                               <span className="font-semibold">Provincia: </span>
-                              {currentOrder.user.shippingAddress.province}
+                              {currentOrder.shippingDetails.province}
                             </span>
                             <span>
                               <span className="font-semibold">
                                 Código postal:{" "}
                               </span>
-                              {currentOrder.user.shippingAddress.postalCode}
+                              {currentOrder.shippingDetails.postalCode}
                             </span>
                           </div>
                         </div>
-                        <div className="flex flex-col gap-2 justify-center ml-4">
+                        <div className="flex flex-col gap-2 justify-center pl-14">
                           <button
                             className="btn btn-outline"
                             onClick={() =>
-                              changeOrderState(
-                                currentOrder.orderId,
-                                "Confirmado"
-                              )
+                              changeOrderState(currentOrder._id, "Confirmado")
                             }
                           >
                             Confirmar pedido
@@ -293,10 +224,7 @@ export default function AdminOrders() {
                           <button
                             className="btn btn-outline"
                             onClick={() =>
-                              changeOrderState(
-                                currentOrder.orderId,
-                                "Cancelado"
-                              )
+                              changeOrderState(currentOrder._id, "Cancelado")
                             }
                           >
                             Cancelar pedido
@@ -304,7 +232,7 @@ export default function AdminOrders() {
                           <button
                             className="btn btn-outline"
                             onClick={() =>
-                              changeOrderState(currentOrder.orderId, "Enviado")
+                              changeOrderState(currentOrder._id, "Enviado")
                             }
                           >
                             Pedido enviado

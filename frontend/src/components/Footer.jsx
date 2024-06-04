@@ -27,7 +27,7 @@ export default function Footer() {
       </nav>
       <nav>
         <h6 className="footer-title">Legal</h6>
-        <a className="link link-hover">Terminos y condiciones</a>
+        <Link to="/legal" className="link link-hover">Terminos y condiciones</Link>
       </nav>
     </footer>
   );

@@ -9,13 +9,13 @@ import News from "./pages/News.jsx";
 import Store from "./pages/Store.jsx";
 import Error from "./pages/error/Error.jsx";
 import EmailVerification from "./pages/error/EmailVerification.jsx";
-import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import AdminProducts from "./pages/admin/AdminProducts.jsx";
 import Product from "./pages/Product.jsx";
 import { Wrapper } from "./pages/checkout/Checkout.jsx";
 import OrderFinished from "./pages/checkout/OrderFinished.jsx";
 import AdminOrders from "./pages/admin/AdminOrders.jsx";
 import AdminCustomers from "./pages/admin/AdminCustomers.jsx";
+import Legal from "./pages/Legal.jsx";
 
 export {
   Login,
@@ -30,10 +30,10 @@ export {
   Product,
   Error,
   EmailVerification,
-  AdminDashboard,
   AdminProducts,
   Wrapper,
   OrderFinished,
   AdminOrders,
   AdminCustomers,
+  Legal,
 };

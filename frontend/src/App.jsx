@@ -15,12 +15,12 @@ import {
   Product,
   Error,
   EmailVerification,
-  AdminDashboard,
   AdminProducts,
   Wrapper,
   OrderFinished,
   AdminOrders,
   AdminCustomers,
+  Legal,
 } from "./Routes";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
@@ -44,36 +44,46 @@ export default function App() {
             reverseOrder={false}
             toastOptions={{ duration: 2500 }}
           />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/news" element={<News />} />
-            <Route path="/store/:genre" element={<Store />} />
-            <Route path="/store/:genre/:productName" element={<Product />} />
-            <Route
-              path="/users/:id/verify/:token"
-              element={<EmailVerification />}
-            />
-            <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route
-              path="/admin-dashboard/products"
-              element={<AdminProducts />}
-            />
-            <Route path="/admin-dashboard/orders" element={<AdminOrders />} />
-            <Route
-              path="/admin-dashboard/customers"
-              element={<AdminCustomers />}
-            />
-            <Route path="/checkout" element={<Wrapper />} />
-            <Route path="/order-finished" element={<OrderFinished />} />
-            <Route path="/*" element={<Error />} />
-          </Routes>
-          <Footer />
+          <div className="flex flex-col min-h-screen">
+            <main className="flex-grow">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/legal" element={<Legal />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/store/:genre" element={<Store />} />
+                <Route
+                  path="/store/:genre/:productName"
+                  element={<Product />}
+                />
+                <Route
+                  path="/users/:id/verify/:token"
+                  element={<EmailVerification />}
+                />
+                <Route
+                  path="/admin-dashboard/products"
+                  element={<AdminProducts />}
+                />
+                <Route
+                  path="/admin-dashboard/orders"
+                  element={<AdminOrders />}
+                />
+                <Route
+                  path="/admin-dashboard/customers"
+                  element={<AdminCustomers />}
+                />
+                <Route path="/checkout" element={<Wrapper />} />
+                <Route path="/order-finished" element={<OrderFinished />} />
+                <Route path="/*" element={<Error />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
         </CartContextProvider>
       </UserContextProvider>
     </GoogleOAuthProvider>
