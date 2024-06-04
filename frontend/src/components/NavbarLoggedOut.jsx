@@ -18,36 +18,6 @@ export default function NavbarLoggedOut({ genres }) {
         padding="lg:pt-4 max-lg:pt-3"
         genres={genres}
       />
-      <div className="mr-1 dropdown dropdown-end max-lg:hidden lg:block">
-        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="black"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </div>
-        <div
-          tabIndex={0}
-          className="z-[1] card card-compact dropdown-content w-52 bg-accent shadow"
-        >
-          <div className="card-body">
-            <TextBoxWithTextOnTop
-              type="text"
-              text="Buscar"
-              placeholder="Buscar..."
-            />
-          </div>
-        </div>
-      </div>
       <Link to="/login" className="btn btn-outline">
         Iniciar sesión
       </Link>
@@ -63,40 +33,6 @@ export default function NavbarLoggedOut({ genres }) {
         <Link to="/" className="btn btn-ghost text-xl text-black">
           Laxart
         </Link>
-      </div>
-
-      {/** Icono de busqueda */}
-      <div className="mr-2 dropdown dropdown-end lg:hidden">
-        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="black"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </div>
-        <div
-          tabIndex={0}
-          className="z-[1] card card-compact dropdown-content w-52 bg-accent shadow"
-        >
-          <div className="card-body">
-            <form action="">
-              <TextBoxWithTextOnTop
-                type="text"
-                text="Buscar"
-                placeholder="Buscar..."
-              />
-            </form>
-          </div>
-        </div>
       </div>
 
       {/**Navbar en forma de menu desplegable para pantallas mas pequeñas */}

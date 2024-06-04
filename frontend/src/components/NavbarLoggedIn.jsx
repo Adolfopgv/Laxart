@@ -41,46 +41,11 @@ export default function NavbarLoggedIn({ genres }) {
         padding="lg:pt-4 max-lg:pt-3"
         genres={genres}
       />
-
-      {/** icono de busqueda */}
-      <div className="mr-1 dropdown dropdown-end max-lg:hidden lg:block">
-        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="black"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </div>
-        <div
-          tabIndex={0}
-          className="z-[1] card card-compact dropdown-content w-52 bg-accent shadow"
-        >
-          <div className="card-body">
-            <TextBoxWithTextOnTop
-              type="text"
-              text="Buscar"
-              placeholder="Buscar..."
-            />
-          </div>
-        </div>
-      </div>
     </ul>
   );
 
   const adminNavList = (
     <ul className="text-primary mt-2 mb-4 m-3 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-      <Link to="/admin-dashboard" className="btn btn-ghost">
-        Panel de inicio
-      </Link>
       <Link to="/admin-dashboard/products" className="btn btn-ghost">
         Productos
       </Link>
@@ -89,9 +54,6 @@ export default function NavbarLoggedIn({ genres }) {
       </Link>
       <Link to="/admin-dashboard/customers" className="btn btn-ghost">
         Clientes
-      </Link>
-      <Link to="/admin-dashboard/statistics" className="btn btn-ghost">
-        Estadísticas
       </Link>
     </ul>
   );
@@ -114,8 +76,6 @@ export default function NavbarLoggedIn({ genres }) {
           <div>{adminNavList}</div>
         )}
       </div>
-
-      {/** Icono de busqueda (Queda mal en moviles) */}
 
       {/** Carrito de compra */}
       {user.role !== 1 && <ShoppingCartComponent />}
