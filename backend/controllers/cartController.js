@@ -49,6 +49,9 @@ const removeFromCart = async (req, res) => {
     }
 
     let cart = await Cart.findOne({ userId });
+    console.log("carrito:", cart);
+    console.log(productId);
+    console.log(type);
 
     if (!cart) {
       return res.status(404).json({ error: "Carrito no encontrado" });
@@ -57,6 +60,7 @@ const removeFromCart = async (req, res) => {
     let productIndex = cart.products.findIndex(
       (item) => item.product.toString() === productId && item.type === type
     );
+    console.log(productIndex);
 
     if (productIndex === -1) {
       return res
@@ -65,6 +69,9 @@ const removeFromCart = async (req, res) => {
     }
 
     let productInCart = cart.products[productIndex];
+
+    console.log("product in cart: ", productInCart);
+    console.log("products: ", cart.products);
 
     if (productInCart.quantity > 1) {
       productInCart.quantity -= 1;
@@ -77,6 +84,7 @@ const removeFromCart = async (req, res) => {
     res.status(200).json({ message: "Producto eliminado" });
   } catch (error) {
     res.status(500).json({ error: "Error del servidor" });
+    console.log("Error:", error);
   }
 };
 
@@ -98,7 +106,10 @@ const getCartProducts = async (req, res) => {
 const removeAllProducts = async (req, res) => {
   try {
     const userId = req.params.userid;
-    await Cart.findOneAndDelete({ userId });
+    let cart = await Cart.findOne({ userId });
+
+    cart.products = [];
+    await cart.save();
 
     return res.status(200).json({ message: "Carrito eliminado" });
   } catch (error) {

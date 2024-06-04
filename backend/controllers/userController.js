@@ -110,4 +110,16 @@ const getUser = async (req, res) => {
   }
 };
 
-module.exports = { updateAddresses, getShippingAddress, getUser };
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+
+    if (users) {
+      return res.json(users);
+    }
+  } catch (error) {
+    console.error("Error al recoger usuarios: ", error);
+  }
+};
+
+module.exports = { updateAddresses, getShippingAddress, getUser, getAllUsers };

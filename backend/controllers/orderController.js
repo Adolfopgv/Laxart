@@ -28,27 +28,43 @@ const checkoutOrder = async (req, res) => {
 
 const registerOrder = async (req, res) => {
   try {
-    const userId = req.params.userid;
-    const { products, totalPrice, itemsQuantity } = req.body;
+    const { user, shippingDetails, products, totalPrice, itemsQuantity } =
+      req.body;
 
-    if (!userId || !products || !products.length || !totalPrice) {
+    if (
+      !user ||
+      !products ||
+      !products.length ||
+      !totalPrice ||
+      !shippingDetails
+    ) {
       return res.status(400).json({
         error: "Faltan datos necesarios para realizar el pedido",
       });
     }
 
     const newOrder = new Order({
-      userId,
+      user: {
+        userId: user._id,
+        email: user.email,
+        username: user.username,
+      },
+      shippingDetails: shippingDetails,
       items: products.map((product) => ({
-        product: product.productId,
+        productId: product.productId,
+        productName: product.productName,
         quantity: product.quantity,
         type: product.type,
+        price: product.price,
+        discount: product.discount,
+        image: product.image,
       })),
       totalPrice: totalPrice,
       itemsQuantity: itemsQuantity,
     });
     await newOrder.save();
 
+    console.log("New order: ", newOrder.items);
     res.status(200).json({ message: "Pedido realizado con éxito" });
   } catch (error) {
     res.status(500).json({ error: "Error al realizar el pedido" });

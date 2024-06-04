@@ -8,7 +8,7 @@ const {
 } = require("../controllers/orderController");
 
 router.post("/checkout-order", checkoutOrder);
-router.post("/register-order/:userid", registerOrder);
+router.post("/register-order", registerOrder);
 router.get("/get-orders", getOrders);
 router.post("/change-order-state/:orderid", changeOrderState);
 

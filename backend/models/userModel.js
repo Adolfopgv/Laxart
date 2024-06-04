@@ -36,44 +36,7 @@ const userSchema = new Schema(
       type: Number,
       default: 0,
     },
-    shoppingCart: {
-      type: Schema.Types.ObjectId,
-      ref: "Cart",
-    },
     shippingAddress: {
-      name: {
-        type: String,
-        trim: true,
-      },
-      surname: {
-        type: String,
-        trim: true,
-      },
-      address1: {
-        type: String,
-        trim: true,
-      },
-      address2: {
-        type: String,
-        trim: true,
-      },
-      country: {
-        type: String,
-        trim: true,
-      },
-      province: {
-        type: String,
-        trim: true,
-      },
-      locality: {
-        type: String,
-        trim: true,
-      },
-      postalCode: {
-        type: Number,
-      },
-    },
-    billingAddress: {
       name: {
         type: String,
         trim: true,

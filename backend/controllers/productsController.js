@@ -95,6 +95,7 @@ const deleteProduct = async (req, res) => {
   try {
     const productId = req.params.id;
     await Product.findByIdAndDelete(productId);
+
     res.status(200).json({ message: "Producto eliminado correctamente" });
   } catch (error) {
     res.status(500).json({ error: "Error al eliminar el producto" });
@@ -119,10 +120,30 @@ const updateProduct = async (req, res) => {
   }
 };
 
+const getProductsByQuery = async (req, res) => {
+  const { query } = req.query;
+  const products = await Product.find();
+
+  if (query) {
+    const filterProducts = products.filter(
+      (product) =>
+        product?.productName
+          .toLowerCase()
+          .trim()
+          .includes(query.toLowerCase().trim()) ||
+        product?.genre.toLowerCase().trim().includes(query.toLowerCase().trim())
+    );
+    return res.json({ products: filterProducts });
+  } else {
+    return res.json({ products: products });
+  }
+};
+
 module.exports = {
   uploadProduct,
   getProducts,
   deleteProduct,
   updateProduct,
   getProductById,
+  getProductsByQuery,
 };
