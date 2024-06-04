@@ -29,9 +29,9 @@ const checkoutOrder = async (req, res) => {
 const registerOrder = async (req, res) => {
   try {
     const userId = req.params.userid;
-    const products = req.body.products;
+    const { products, totalPrice, itemsQuantity } = req.body;
 
-    if (!userId || !products || !products.length) {
+    if (!userId || !products || !products.length || !totalPrice) {
       return res.status(400).json({
         error: "Faltan datos necesarios para realizar el pedido",
       });
@@ -42,7 +42,10 @@ const registerOrder = async (req, res) => {
       items: products.map((product) => ({
         product: product.productId,
         quantity: product.quantity,
+        type: product.type,
       })),
+      totalPrice: totalPrice,
+      itemsQuantity: itemsQuantity,
     });
     await newOrder.save();
 
@@ -59,7 +62,28 @@ const getOrders = async (req, res) => {
     if (orders) {
       return res.json(orders);
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-module.exports = { checkoutOrder, registerOrder, getOrders };
+const changeOrderState = async (req, res) => {
+  try {
+    const orderId = req.params.orderid;
+    const { orderState } = req.body;
+
+    const order = await Order.findById(orderId);
+
+    if (order) {
+      order.status = orderState;
+      await order.save();
+      return res.status(200).json({ message: "Estado cambiado" });
+    } else {
+      return res.json({ error: "No se ha encontrado ningún pedido" });
+    }
+  } catch (error) {
+    console.error("Change order state: ", error);
+  }
+};
+
+module.exports = { checkoutOrder, registerOrder, getOrders, changeOrderState };

@@ -24,7 +24,8 @@ export const Wrapper = () => (
 const Checkout = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const { totalPrice, products, setCartChanged } = useContext(CartContext);
+  const { totalPrice, products, setCartChanged, quantity } =
+    useContext(CartContext);
   const [button, setButton] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState();
   const [showCardForm, setShowCardForm] = useState(false);
@@ -117,7 +118,10 @@ const Checkout = () => {
               products: products.map((product) => ({
                 productId: product._id,
                 quantity: product.quantity,
+                type: product.type,
               })),
+              totalPrice: totalPrice,
+              itemsQuantity: quantity,
             });
             if (!response.data.error) {
               const deleteCart = await axios.delete(
@@ -309,10 +313,10 @@ const Checkout = () => {
                 <div className="card-body mt-4">
                   <div className="grid gap-4">
                     <div className="flex flex-col">
-                      {products?.map((product) => (
+                      {products?.map((product, index) => (
                         <div
                           className="flex items-center justify-between"
-                          key={product._id}
+                          key={[product._id, index]}
                         >
                           <div className="flex flex-row">
                             <img
@@ -330,12 +334,15 @@ const Checkout = () => {
                               <span className="font-normal">
                                 {product.productName}
                               </span>
+                              <span className="font-thin">{product.type}</span>
                               <span className="text-sm font-thin">
                                 Cantidad: {product.quantity}
                               </span>
                             </div>
                           </div>
-                          <span>{product.price}€</span>
+                          <span>
+                            {(product.price * product.quantity).toFixed(2)}€
+                          </span>
                         </div>
                       ))}
                     </div>

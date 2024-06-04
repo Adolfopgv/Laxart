@@ -29,6 +29,9 @@ const orderSchema = new Schema(
     totalPrice: {
       type: Number,
     },
+    itemsQuantity: {
+      type: Number,
+    },
   },
   { timestamps: true }
 );

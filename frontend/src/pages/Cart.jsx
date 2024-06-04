@@ -13,12 +13,13 @@ export default function Cart() {
 
   const deleteCartProduct = async (productId, productType) => {
     const idToast = toast.loading("Quitando producto del carrito...");
-
     try {
       const response = await axios.delete(
         `/remove-from-cart/${user._id}/${productId}`,
         {
-          type: productType,
+          params: {
+            type: productType,
+          },
         }
       );
 
@@ -28,7 +29,9 @@ export default function Cart() {
       } else {
         toast.error(response.data.error, { id: idToast });
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Error del servidor", { id: idToast });
+    }
   };
 
   const addCartProduct = async (productId, productType) => {

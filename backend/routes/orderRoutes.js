@@ -4,10 +4,12 @@ const {
   checkoutOrder,
   registerOrder,
   getOrders,
+  changeOrderState,
 } = require("../controllers/orderController");
 
 router.post("/checkout-order", checkoutOrder);
 router.post("/register-order/:userid", registerOrder);
 router.get("/get-orders", getOrders);
+router.post("/change-order-state/:orderid", changeOrderState);
 
 module.exports = router;

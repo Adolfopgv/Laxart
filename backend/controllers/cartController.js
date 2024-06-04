@@ -6,7 +6,7 @@ const addToCart = async (req, res) => {
     const productId = req.params.product;
     const { type } = req.body;
 
-    if (!userId || !productId) {
+    if (!userId || !productId || !type) {
       return res.status(400).json({ error: "Error al añadir producto" });
     }
 
@@ -42,20 +42,34 @@ const removeFromCart = async (req, res) => {
   try {
     const userId = req.params.userid;
     const productId = req.params.product;
-    const { type } = req.body;
+    const { type } = req.query;
 
-    const cart = await Cart.findOne({ userId });
+    if (!userId || !productId || !type) {
+      return res.status(400).json({ error: "Error al añadir producto" });
+    }
 
-    const productInCart = cart.products.find((item) => {
-      item.product.toString() === productId && item.type === type;
-    });
+    let cart = await Cart.findOne({ userId });
 
-    if (productInCart && productInCart.quantity > 1) {
+    if (!cart) {
+      return res.status(404).json({ error: "Carrito no encontrado" });
+    }
+
+    let productIndex = cart.products.findIndex(
+      (item) => item.product.toString() === productId && item.type === type
+    );
+
+    if (productIndex === -1) {
+      return res
+        .status(404)
+        .json({ error: "Producto no encontrado en el carrito" });
+    }
+
+    let productInCart = cart.products[productIndex];
+
+    if (productInCart.quantity > 1) {
       productInCart.quantity -= 1;
-    } else if (productInCart.quantity <= 1) {
-      productInCart.deleteOne();
     } else {
-      return res.json({ error: "No se ha podido eliminar el producto" });
+      cart.products.splice(productIndex, 1);
     }
 
     await cart.save();
@@ -84,13 +98,9 @@ const getCartProducts = async (req, res) => {
 const removeAllProducts = async (req, res) => {
   try {
     const userId = req.params.userid;
-    const cart = await Cart.findOne({ userId: userId });
+    await Cart.findOneAndDelete({ userId });
 
-    if (cart) {
-      cart.products = [];
-      await cart.save();
-      res.status(200).json({ message: "Carrito eliminado" });
-    }
+    return res.status(200).json({ message: "Carrito eliminado" });
   } catch (error) {
     res.status(500).json({ error: "Error al borrar el carrito" });
   }

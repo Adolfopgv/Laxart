@@ -221,7 +221,7 @@ export default function AdminProducts() {
                     onChange={uploadImg}
                     className="file-input file-input-bordered file-input-secondary w-full max-w-xs"
                   />
-                  <img src={img} className="m-5 shadow sm:w-2/4" />
+                  <img src={img} className="m-5 shadow sm:w-2/4 rounded" />
                 </label>
                 <button
                   type="submit"
@@ -234,7 +234,7 @@ export default function AdminProducts() {
 
             <div className="divider lg:divider-horizontal" />
 
-            <div className="m-10 overflow-y-auto overflow-x-auto overflow-hidden max-h-[650px] max-sm:">
+            <div className="m-10 overflow-y-auto overflow-x-auto overflow-hidden max-h-[650px]">
               <table className="text-left font-light text-surface max-w-[85%] min-w-[75%]">
                 <caption className="caption-top mb-2">
                   <span className="card-title">
@@ -290,7 +290,7 @@ export default function AdminProducts() {
                                 <img
                                   src={imgEdit}
                                   alt=""
-                                  className="m-5 shadow sm:w-2/4"
+                                  className="m-5 shadow sm:w-2/4 rounded"
                                 />
                               </label>
                             </td>
@@ -372,7 +372,7 @@ export default function AdminProducts() {
                             </td>
                             <td className="px-6 py-4">
                               <div className="relative w-24">
-                                <img src={product.image} className="h-24" />
+                                <img src={product.image} className="h-24 rounded" />
                               </div>
                             </td>
                             <td className="whitespace-nowrap px-6 py-4">

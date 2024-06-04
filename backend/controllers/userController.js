@@ -96,7 +96,7 @@ const getShippingAddress = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
-    const userId = req.params.userid;
+    const userId = req.params.id;
     const user = await User.findById(userId);
 
     if (user) {

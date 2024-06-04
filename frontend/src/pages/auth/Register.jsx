@@ -132,7 +132,7 @@ export default function Register() {
                       }}
                     />
                     {emailError && (
-                      <span className="text-error ml-2">
+                      <span className="text-error ml-2 font-bold">
                         {emailErrorMessage}
                       </span>
                     )}
@@ -147,7 +147,7 @@ export default function Register() {
                       }}
                     />
                     {userError && (
-                      <span className="text-error ml-2">
+                      <span className="text-error ml-2 font-bold">
                         {userErrorMessage}
                       </span>
                     )}
@@ -171,7 +171,7 @@ export default function Register() {
                       }
                     />
                     {passwordError && (
-                      <span className="text-error ml-2">
+                      <span className="text-error ml-2 font-bold">
                         {passwordErrorMessage}
                       </span>
                     )}
@@ -197,7 +197,7 @@ export default function Register() {
                       }
                     />
                     {repeatPasswordError && (
-                      <span className="text-error ml-2">
+                      <span className="text-error ml-2 font-bold">
                         {repeatPasswordErrorMessage}
                       </span>
                     )}

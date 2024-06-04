@@ -57,6 +57,7 @@ export function CartContextProvider({ children }) {
             })
           );
 
+          // FLAG MIRAR FILTER (QUITAR SI HACE FALTA)
           const validProductDetails = productDetails.filter(
             (product) => product !== null
           );

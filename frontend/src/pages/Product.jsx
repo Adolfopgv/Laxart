@@ -72,10 +72,9 @@ export default function Product() {
                 <details
                   className="dropdown"
                   open={(dropdownOpen) => !dropdownOpen}
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
                   <summary
-                    className={`m-1 btn bg-white ${typeError && "bg-error"}`}
+                    className={`m-1 btn ${typeError ? "bg-error" : "bg-white"}`}
                   >
                     {type ? type : typeError ? "¡Elije un tipo!" : "Tipo"}
                   </summary>
@@ -86,7 +85,7 @@ export default function Product() {
                           key={type}
                           onClick={() => {
                             setType(type);
-                            setDropdownOpen(false);
+                            setDropdownOpen(!dropdownOpen);
                             setTypeError(false);
                           }}
                         >

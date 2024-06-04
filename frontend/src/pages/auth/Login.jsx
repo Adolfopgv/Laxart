@@ -124,7 +124,7 @@ export default function Login() {
                       }}
                     />
                     {emailError && (
-                      <span className="text-error ml-2">
+                      <span className="text-error ml-2 font-bold">
                         {emailErrorMessage}
                       </span>
                     )}
@@ -148,7 +148,7 @@ export default function Login() {
                       }
                     />
                     {passwordError && (
-                      <span className="text-error ml-2">
+                      <span className="text-error ml-2 font-bold">
                         {passwordErrorMessage}
                       </span>
                     )}

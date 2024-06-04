@@ -12,12 +12,13 @@ const ShoppingCartComponent = () => {
 
   const deleteCartProduct = async (productId, productType) => {
     const idToast = toast.loading("Quitando producto del carrito...");
-
     try {
       const response = await axios.delete(
         `/remove-from-cart/${user._id}/${productId}`,
         {
-          type: productType,
+          params: {
+            type: productType,
+          },
         }
       );
 
@@ -27,12 +28,13 @@ const ShoppingCartComponent = () => {
       } else {
         toast.error(response.data.error, { id: idToast });
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Error del servidor", { id: idToast });
+    }
   };
 
   const addCartProduct = async (productId, productType) => {
     const idToast = toast.loading("Añadiendo producto al carrito...");
-
     try {
       const response = await axios.post(
         `/add-to-cart/${user._id}/${productId}`,
@@ -40,6 +42,7 @@ const ShoppingCartComponent = () => {
           type: productType,
         }
       );
+
       if (!response.data.error) {
         toast.success(response.data.message, { id: idToast });
         setCartChanged((val) => !val);
@@ -78,15 +81,17 @@ const ShoppingCartComponent = () => {
       >
         <div className="card-body">
           <span className="font-bold text-lg">{quantity} Productos</span>
-          <span className="text-black">Total: €{totalPrice.toFixed(2)}</span>
+          <span className="text-white">Total: {totalPrice.toFixed(2)}€</span>
           <div className="card-actions overflow-auto max-h-96">
-            {console.log(products)}
             {products.map((product, index) => (
-              <div key={[product._id, index]} className="flex flex-row items-center mb-2">
-                <img src={product.image} className="w-16 h-16 mr-3" />
+              <div
+                key={[product._id, index]}
+                className="flex flex-row items-center mb-2"
+              >
+                <img src={product.image} className="w-16 h-16 mr-3 rounded" />
                 <div className="flex flex-col text-primary">
                   <span>{product.productName}</span>
-                  <span>Tipo: {product.type}</span>
+                  <span>{product.type}</span>
                   <span>{(product.price * product.quantity).toFixed(2)}€</span>
                   <span>Cantidad: {product.quantity}</span>
                 </div>
