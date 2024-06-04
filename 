@@ -1,0 +1,132 @@
+[33mcommit 38091ac9d183f6b37a988634f20517ff7525b34c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/dev[m[33m)[m
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Mon May 20 19:41:56 2024 +0200
+
+    Bug de inicio de sesión arreglado, bug de textbox con texto blanco arreglado, añadido la variable verificado en el login para que no entre en la sesión sin el mail verificado
+
+[33mcommit 45409f7addcad05183620e601a31929a8a02195c[m
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Mon May 20 01:22:11 2024 +0200
+
+    products schema, admin auth, admin pages
+
+[33mcommit e3a33e87260c2420717afa5aada466329cfc5e1f[m
+Merge: c05df27 d272f8d
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Sat May 18 22:06:07 2024 +0200
+
+    Merge branch 'dev' of https://github.com/Adolfopgv/Laxart into dev
+
+[33mcommit c05df27797d9c11c45bb3eed9c97e450a85e7f10[m
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Sat May 18 22:04:19 2024 +0200
+
+    Admin auth y dashboard, verificacion email 100% hecho
+
+[33mcommit d272f8dfe6b62a9335884b0c4bffca795ec524a1[m
+Author: Adolfo <123238971+Adolfopgv@users.noreply.github.com>
+Date:   Fri May 17 08:38:03 2024 +0200
+
+    Delete CNAME
+
+[33mcommit 8a4e408ac33544e5eb6c65b648253b777ebb2b13[m
+Author: Adolfo <123238971+Adolfopgv@users.noreply.github.com>
+Date:   Fri May 17 08:37:52 2024 +0200
+
+    Update CNAME
+
+[33mcommit c436469d0bfdfa3b16b545f67db0292a0791cbf9[m
+Author: Adolfo <123238971+Adolfopgv@users.noreply.github.com>
+Date:   Fri May 17 08:37:17 2024 +0200
+
+    Create CNAME
+
+[33mcommit 71ee5549f20e87bad28477f41b7b51d5e111f9cf[m
+Author: Adolfo <123238971+Adolfopgv@users.noreply.github.com>
+Date:   Fri May 17 08:37:04 2024 +0200
+
+    Delete CNAME
+
+[33mcommit 05caf81a70108adbff376b671879cd9264d0506d[m
+Author: Adolfo <123238971+Adolfopgv@users.noreply.github.com>
+Date:   Fri May 17 08:36:41 2024 +0200
+
+    Create CNAME
+
+[33mcommit dfd453149375e28719603ff27b31e6ed7fcb1792[m
+Author: Adolfo <123238971+Adolfopgv@users.noreply.github.com>
+Date:   Fri May 17 08:36:30 2024 +0200
+
+    Delete CNAME
+
+[33mcommit 6381a35a306add36daba38d5fe4949dd7f3e5062[m
+Author: Adolfo <123238971+Adolfopgv@users.noreply.github.com>
+Date:   Fri May 17 08:36:04 2024 +0200
+
+    Create CNAME
+
+[33mcommit df4dd599407658da5465fb1ebb20a43135f7d43e[m
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Fri May 17 01:36:07 2024 +0200
+
+    Mejorado todo el register, añadido verificacion por email y mas estilos
+
+[33mcommit 4e3f3aad1707cc9a70289080245858a4b0c57323[m
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Thu May 16 12:32:28 2024 +0200
+
+    banner arreglado y textbox width arreglado
+
+[33mcommit 56c51d9b3373b05eef4d2bc4ca528a6df7b3342d[m
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Thu May 16 00:51:28 2024 +0200
+
+    diseño estructurado con diferentes colores para la app que utilizare a lo largo del desarrollo
+
+[33mcommit 41b72aa96cb547de55a8fded5b6c3442593ef17c[m
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Tue May 14 18:37:32 2024 +0200
+
+    Navbar optimizado
+
+[33mcommit 2bb77b2276843a468d1d9028c0d3bd6f5b612329[m
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Mon May 13 09:01:25 2024 +0200
+
+    arreglado algo en register (login no funciona en portatil)
+
+[33mcommit d971effb57e58a92da4c6af8ba548d4694c172a7[m
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Mon May 13 00:09:16 2024 +0200
+
+    olvidado back
+
+[33mcommit e6eeb7ae79cf324936d352dc6251579e7f772bc3[m
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Mon May 13 00:08:44 2024 +0200
+
+    UI login y register terminado, navbar responsive y theme añadido
+
+[33mcommit e64bde50724cdeb25f1d8462f5507447a44329a9[m
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Sun May 12 03:58:03 2024 +0200
+
+    Cookies gestionadas y empezado google oauth
+
+[33mcommit bb678fc23062af82f193a02707221be08aeee350[m
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Sat May 11 03:01:40 2024 +0200
+
+    back autenticacion terminada (mirar tema de contraseña en front)
+
+[33mcommit 2bd6f49d77859e021a3db947cd4738a44ac60f5a[m
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Fri May 10 15:01:48 2024 +0200
+
+    cambios 15:00 10/05
+
+[33mcommit 6e91b70e26b482dcaf202d9176b7462d3c34de67[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: Adolfopgv <adolfopgv@gmail.com>
+Date:   Fri May 10 09:57:46 2024 +0200
+
+    primer commit arreglando el repo

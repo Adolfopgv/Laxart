@@ -1,11 +1,12 @@
-import React from 'react'
+import React from "react";
+import banner_inicio from "../assets/banner_inicio.png";
 
 export default function Home() {
   return (
     <>
-      <body>
-        <h1 class="text-blue-600">Home</h1>
-      </body>
+      <div>
+        <img src={banner_inicio} alt="" />
+      </div>
     </>
-  )
+  );
 }

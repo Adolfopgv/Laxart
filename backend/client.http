@@ -1,1 +1,36 @@
-POST http://localhost:3000/register
+### Prueba de registro
+POST http://localhost:3000/register HTTP/1.1
+content-type: application/json
+
+{
+    "email": "pruebaemail3@verification",
+    "username": "PruebaEmail",
+    "password": "PruebaEmail1233",
+    "repeatPassword": "PruebaEmail1233"
+}
+
+
+### Prueba de login
+POST http://localhost:3000/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "pruebaemail3@verification",
+    "password": "PruebaEmail1233"
+}
+
+
+### Prueba coger usuario
+GET http://localhost:3000/profile HTTP/1.1
+
+
+### Prueba logout (borrar cookies)
+POST http://localhost:3000/logout HTTP/1.1
+
+
+### Prueba email verificado
+GET http://localhost:5173/users/6648cf08e4b92cd1a6699d5c/verify/55910f4a0a9615f0cb616d5648cd7154767a30067417f81ab841a383da2922e0
+
+
+### Prueba products by query
+GET http://localhost:3000/get-products-by-query/?query=Produc HTTP/1.1
