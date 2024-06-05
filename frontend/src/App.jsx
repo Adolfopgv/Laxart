@@ -21,6 +21,8 @@ import {
   AdminOrders,
   AdminCustomers,
   Legal,
+  ForgotPassword,
+  RecoverPassword,
 } from "./Routes";
 import axios from "axios";
 import { Toaster } from "react-hot-toast";
@@ -50,6 +52,7 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/about" element={<About />} />
@@ -64,6 +67,10 @@ export default function App() {
                 <Route
                   path="/users/:id/verify/:token"
                   element={<EmailVerification />}
+                />
+                <Route
+                  path="/users/recover-password/:id/:token"
+                  element={<RecoverPassword />}
                 />
                 <Route
                   path="/admin-dashboard/products"

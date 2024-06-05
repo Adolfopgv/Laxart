@@ -27,6 +27,9 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    recoveryToken: {
+      type: String,
+    },
     avatar: {
       type: String,
       default:
