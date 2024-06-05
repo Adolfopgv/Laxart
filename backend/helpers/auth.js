@@ -27,7 +27,7 @@ const sendEmail = async (email, subject, text, html) => {
       host: process.env.HOST,
       service: process.env.SERVICE,
       post: Number(process.env.EMAIL_PORT),
-      secure: false, // Cambiar a true en prod
+      secure: true, // Cambiar a true en prod
       auth: {
         user: process.env.USER,
         pass: process.env.PASS,
