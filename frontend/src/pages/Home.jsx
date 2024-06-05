@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <>
       <div>
-        <img src={banner_inicio} alt="banner" className="" />
+        <img src={banner_inicio} alt="banner" className="w-full" />
         <main>
           <section className="py-12 md:py-20">
             <div className="container mx-auto px-4 md:px-6">
@@ -33,7 +33,7 @@ export default function Home() {
                     <Link to="/about" className="btn btn-outline">Más Información</Link>
                   </div>
                 </div>
-                <div className="hidden md:block">
+                <div className="block">
                   <img
                     src={img1}
                     width={600}

@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const { hashPassword, comparePasswords } = require("../helpers/auth");
 
 const updateAddresses = async (req, res) => {
   try {
@@ -122,4 +123,111 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-module.exports = { updateAddresses, getShippingAddress, getUser, getAllUsers };
+const changeUserAvatar = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const avatar = req.body.avatar;
+    const user = await User.findById(userId);
+
+    if (user) {
+      user.avatar = avatar;
+      await user.save();
+      res.status(200).json({ message: "Avatar actualizado" });
+    } else {
+      return res.json({ error: "Error al cambiar el avatar" });
+    }
+  } catch (error) {
+    console.error("Error en changeAvatar: ", error);
+  }
+};
+
+const changeUsername = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const username = req.body.username;
+    const user = await User.findById(userId);
+
+    if (!username) {
+      return res.json({ error: "Introduzca un nuevo nombre de usuario" });
+    }
+
+    if (user) {
+      user.username = username;
+      await user.save();
+      res.status(200).json({ message: "Nombre de usuario actualizado" });
+    } else {
+      return res.json({ error: "Error al cambiar el nombre de usuario" });
+    }
+  } catch (error) {
+    console.error("Error en changeUsername: ", error);
+  }
+};
+
+const changePassword = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { actualPassword, newPassword, repeatNewPassword } = req.body;
+    const user = await User.findById(userId);
+
+    if (!actualPassword || !newPassword || !repeatNewPassword) {
+      return res.json({
+        error: "Debes rellenar todos los campos de contraseña",
+      });
+    }
+    if (!actualPassword) {
+      return res.json({
+        error: "Debes escribir tu contraseña actual",
+      });
+    }
+    if (!newPassword || newPassword.length < 6) {
+      return res.json({
+        error:
+          "Debes escribir una contraseña nueva y debe tener al menos 6 caracteres",
+      });
+    }
+    if (!repeatNewPassword) {
+      return res.json({
+        error: "Debes repetir la contraseña nueva",
+      });
+    }
+    if (newPassword != repeatNewPassword) {
+      return res.json({ error: "Las contraseñas no coinciden" });
+    }
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res.json({
+        error:
+          "La contraseña debe contener al menos una mayúscula, una minúscula y un número",
+      });
+    }
+
+    if (user) {
+      const matchPassword = await comparePasswords(
+        actualPassword,
+        user.password
+      );
+      if (matchPassword) {
+        const hashedPassword = await hashPassword(newPassword);
+        user.password = hashedPassword;
+        await user.save();
+        res.status(200).json({ message: "Contraseña actualizada" });
+      } else {
+        return res.json({ error: "La contraseña actual es erronea" });
+      }
+    } else {
+      return res.json({ error: "Error al cambiar la contraseña" });
+    }
+  } catch (error) {
+    console.error("Error en changePassword: ", error);
+  }
+};
+
+module.exports = {
+  updateAddresses,
+  getShippingAddress,
+  getUser,
+  getAllUsers,
+  changeUserAvatar,
+  changeUsername,
+  changePassword,
+};

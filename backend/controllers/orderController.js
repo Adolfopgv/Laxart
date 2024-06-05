@@ -102,4 +102,26 @@ const changeOrderState = async (req, res) => {
   }
 };
 
-module.exports = { checkoutOrder, registerOrder, getOrders, changeOrderState };
+const getOrderByUser = async (req, res) => {
+  try {
+    const userId = req.params.userid;
+    console.log("User:", userId);
+    const orders = await Order.find({ "user.userId": userId });
+    console.log("Pedido: ", orders);
+    if (orders) {
+      return res.json(orders);
+    } else {
+      return res.json({ error: "No hay pedidos" });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+module.exports = {
+  checkoutOrder,
+  registerOrder,
+  getOrders,
+  changeOrderState,
+  getOrderByUser,
+};

@@ -9,6 +9,7 @@ export default function AdminOrders() {
   const [currentOrder, setCurrentOrder] = useState(null);
   const [orderState, setOrderState] = useState(false);
   const { user } = useContext(UserContext);
+  const [totalOrders, setTotalOrders] = useState(0);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -47,17 +48,22 @@ export default function AdminOrders() {
     }
   };
 
+  const totalOrdersPrice = orders.reduce(
+    (total, order) => total + order.totalPrice,
+    0
+  );
+
   return (
     <>
       {user && user.role === 1 ? (
         <div className="flex justify-center m-10 overflow-y-auto overflow-x-auto overflow-hidden">
-          <div className="flex justify-center m-4 sm:m-10 overflow-x-auto w-full">
+          <div className="m-4 sm:m-10 overflow-x-auto w-full">
             <div className="min-w-full overflow-x-auto w-full">
-              <table className="text-center font-light text-surface w-full">
+              <table className="text-center font-light text-surface w-full mb-4">
                 <caption className="caption-top mb-2 text-lg">
                   <span className="card-title">Pedidos {orders.length}</span>
                 </caption>
-                <thead className="border-b border-accent font-medium text-base sm:text-lg">
+                <thead className="bg-secondary border-b border-accent font-medium text-base sm:text-lg">
                   <tr>
                     <th scope="col" className="px-2 py-2 sm:px-6">
                       #
@@ -99,7 +105,8 @@ export default function AdminOrders() {
                               "bg-orange-400") ||
                             (order.status == "Cancelado" && "bg-red-400") ||
                             (order.status == "Enviado" && "bg-green-400") ||
-                            (order.status == "Confirmado" && "bg-blue-400")
+                            (order.status == "Confirmado" && "bg-blue-400") ||
+                            (order.status == "Recibido" && "bg-gray-400")
                           } rounded px-2 py-1 text-xs sm:text-sm font-normal`}
                         >
                           {order.status}
@@ -113,6 +120,9 @@ export default function AdminOrders() {
                 </tbody>
               </table>
             </div>
+            <span className="text-xl font-medium">
+              Ganancias totales: {totalOrdersPrice.toFixed(2)}€
+            </span>
           </div>
 
           <dialog id="my_modal_1" className="modal">

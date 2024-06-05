@@ -30,7 +30,7 @@ function Copyright(props) {
 
 export default function Login() {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, setLogged } = useContext(UserContext);
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -82,12 +82,14 @@ export default function Login() {
         toast.success(`Bienvenido ${data.username}!`, { id: idToast });
         setUser(data.user);
         setData({});
+        setLogged(true)
         navigate("/");
       } else if (data.role === 1) {
         toast.success(`Bienvenido admin ${email}`, { id: idToast });
         setUser(data.user);
         setData({});
-        navigate("/admin-dashboard");
+        setLogged(true)
+        navigate("/admin-dashboard/products");
       } else {
         toast.error(data.message, { id: idToast });
       }

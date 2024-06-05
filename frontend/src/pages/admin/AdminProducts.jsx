@@ -242,7 +242,7 @@ export default function AdminProducts() {
                     {products.data ? products.data.length : products.length}
                   </span>
                 </caption>
-                <thead className="border-b border-accent font-medium">
+                <thead className="bg-secondary border-b border-accent font-medium">
                   <tr>
                     <th scope="col" className="px-6 py-4">
                       #
