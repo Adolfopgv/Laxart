@@ -10,7 +10,8 @@ const bodyParser = require("body-parser");
 app.use(
   cors({
     credentials: true,
-    origin: `${process.env.BASE_URL}`,
+    origin: ["https://laxart-backend.vercel.app"],
+    methods: ["POST", "GET", "DELETE"]
   })
 );
 
