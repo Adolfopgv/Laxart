@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { UserContext } from "../../context/userContext";
 import TextBoxWithTextOnTop from "../../components/TextBoxWithTextOnTop";
+import laxart_logo from "../../assets/icons/laxart_logo.png";
 
 export default function Register() {
   const [passwordEye, setPasswordEye] = useState(false);
@@ -210,8 +211,8 @@ export default function Register() {
                   </button>
                 </form>
               </div>
-              <div>
-                <img src="" alt="logo clara" />
+              <div className="flex items-center">
+                <img src={laxart_logo} alt="logo clara" />
               </div>
             </div>
           </div>

@@ -10,7 +10,7 @@ import ShoppingCartComponent from "./ShoppingCartComponent";
 
 export default function NavbarLoggedIn({ genres }) {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, setLogged } = useContext(UserContext);
 
   const logoutUser = async () => {
     const idToast = toast.loading("Cerrando sesión...");
@@ -19,6 +19,7 @@ export default function NavbarLoggedIn({ genres }) {
       if (res.status === 200) {
         setUser(null);
         toast.success("Sesión cerrada, ¡Adiós!", { id: idToast });
+        setLogged(false);
         navigate("/");
       }
     } catch (error) {
@@ -98,11 +99,7 @@ export default function NavbarLoggedIn({ genres }) {
           <li>
             <Link to={"/profile"} className="justify-between">
               Perfil
-              <span className="badge">New</span>
             </Link>
-          </li>
-          <li>
-            <a>Configuración</a>
           </li>
           <li>
             <button className="btn btn-base-100 mt-2" onClick={logoutUser}>

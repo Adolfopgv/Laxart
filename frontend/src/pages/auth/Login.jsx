@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import TextBoxWithTextOnTop from "../../components/TextBoxWithTextOnTop";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import laxart_logo from "../../assets/icons/laxart_logo.png";
+import Error from "../error/Error";
 
 function Copyright(props) {
   return (
@@ -30,7 +31,7 @@ function Copyright(props) {
 
 export default function Login() {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, setLogged } = useContext(UserContext);
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -82,12 +83,14 @@ export default function Login() {
         toast.success(`Bienvenido ${data.username}!`, { id: idToast });
         setUser(data.user);
         setData({});
+        setLogged(true);
         navigate("/");
       } else if (data.role === 1) {
         toast.success(`Bienvenido admin ${email}`, { id: idToast });
         setUser(data.user);
         setData({});
-        navigate("/admin-dashboard");
+        setLogged(true);
+        navigate("/admin-dashboard/products");
       } else {
         toast.error(data.message, { id: idToast });
       }
@@ -184,14 +187,14 @@ export default function Login() {
                   </div>
                 </form>
               </div>
-              <div>
-                <img className="mt-12" src={laxart_logo} alt="logo clara" />
+              <div className="flex items-center">
+                <img src={laxart_logo} alt="logo clara" />
               </div>
             </div>
           </div>
         </div>
       ) : (
-        navigate("/error")
+        <Error />
       )}
     </>
   );

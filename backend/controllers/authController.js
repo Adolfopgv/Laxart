@@ -74,7 +74,12 @@ const registerUser = async (req, res) => {
         token: crypto.randomBytes(32).toString("hex"),
       });
       const url = `${process.env.BASE_URL}/users/${user._id}/verify/${emailToken.token}`;
-      await sendEmail(user.email, "¡Verifica tu cuenta de Laxart!", url);
+      await sendEmail(
+        user.email,
+        "¡Verifica tu cuenta de Laxart!",
+        url,
+        `<h1>Verifica tu cuenta</h1><p>Haz <a href='${url}'>clic aquí</a> para verificarte ahora.</p>`
+      );
 
       return res.json({ message: "Se ha enviado un email de verifiación" });
     }
@@ -124,7 +129,12 @@ const loginUser = async (req, res) => {
             token: crypto.randomBytes(32).toString("hex"),
           });
           const url = `${process.env.BASE_URL}/users/${user._id}/verify/${emailToken.token}`;
-          await sendEmail(user.email, "¡Verifica tu cuenta de Laxart!", url);
+          await sendEmail(
+            user.email,
+            "¡Verifica tu cuenta de Laxart!",
+            url,
+            `<h1>Verifica tu cuenta</h1><p>Haz <a href='${url}'>clic aquí</a> para verificarte ahora.</p>`
+          );
         }
         return res.status(200).json({
           message:
@@ -206,10 +216,112 @@ const verifyEmailToken = async (req, res) => {
   }
 };
 
+const recoverPassword = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const token = crypto.randomBytes(32).toString("hex");
+    const hashedToken = await hashPassword(token);
+
+    if (!email) {
+      return res.json({
+        error: "Debes escribir un email para recuperar la contraseña",
+      });
+    }
+
+    const user = await User.findOne({ email: email });
+
+    if (user) {
+      user.recoveryToken = hashedToken;
+      const savedUser = await user.save();
+      if (savedUser) {
+        const url = `${process.env.BASE_URL}/users/recover-password/${user._id}/${token}`;
+        await sendEmail(
+          user.email,
+          "¡Recupera tu contraseña!",
+          url,
+          `<h1>Recupera tu contraseña</h1><p>Haz <a href='${url}'>clic aquí</a> para recuperarla ahora.</p>`
+        );
+        res.status(200).json({
+          message: "Se ha enviado un email para recuperar tu contraseña",
+        });
+      } else {
+        console.error("Error guardando al usuario token: ", user);
+      }
+    } else {
+      return res.json({
+        error: "No hay ningún usuario registrado con este email",
+      });
+    }
+  } catch (error) {
+    console.error("Error en recoverPassword: ", error);
+  }
+};
+
+const verifyRecoveringPage = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const token = req.params.token;
+
+    const user = await User.findById(userId);
+    const matchTokens = await comparePasswords(token, user.recoveryToken);
+    if (matchTokens) {
+      return res.status(200).json({ message: "Link válido" });
+    } else {
+      return res.json({ error: "Link no válido" });
+    }
+  } catch (error) {
+    console.error("Error changeRecover: ", error);
+  }
+};
+
+const recoverVerifiedPassword = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { newPassword, repeatNewPassword } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (!newPassword || !repeatNewPassword) {
+      return res.json({ error: "Debes ingresar las contraseñas" });
+    }
+    if (!newPassword) {
+      return res.json({ error: "Debes ingresar una contraseña nueva" });
+    }
+    if (!repeatNewPassword) {
+      return res.json({ error: "Debes repetir la contraseña" });
+    }
+    if (newPassword !== repeatNewPassword) {
+      return res.json({ error: "Las contraseñas no coinciden" });
+    }
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res.json({
+        error:
+          "La contraseña debe contener al menos una mayúscula, una minúscula y un número",
+      });
+    }
+
+    if (user) {
+      const hashedPassword = await hashPassword(newPassword);
+      user.password = hashedPassword;
+      user.recoveryToken = "";
+      await user.save();
+      res.status(200).json({ message: "Contraseña actualizada" });
+    } else {
+      return res.json({ error: "Error al cambiar la contraseña" });
+    }
+  } catch (error) {
+    console.error("Recover back pass: ", error);
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getProfile,
   logoutUser,
   verifyEmailToken,
+  recoverPassword,
+  verifyRecoveringPage,
+  recoverVerifiedPassword,
 };
