@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { UserContext } from "../../context/userContext";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import laxart_logo from "../../assets/icons/laxart_logo.png";
 
 export default function EmailVerification() {
+  const { user } = useContext(UserContext);
   const [validUrl, setValidUrl] = useState(false);
   const param = useParams();
 
@@ -25,7 +27,7 @@ export default function EmailVerification() {
 
   return (
     <>
-      {validUrl ? (
+      {!user && validUrl ? (
         <div className="min-h-screen bg-primary flex items-center">
           <div className="card mx-auto w-full max-w-5xl  shadow-xl">
             <div className="grid md:grid-cols-2 grid-cols-1 bg-base-100 rounded-xl">

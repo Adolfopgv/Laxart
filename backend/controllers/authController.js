@@ -7,6 +7,7 @@ const {
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const EmailToken = require("../models/emailToken");
+const path = require("path");
 
 // Register end-point
 const registerUser = async (req, res) => {
@@ -152,7 +153,7 @@ const loginUser = async (req, res) => {
         {},
         (err, token) => {
           if (err) throw err;
-          res.cookie("token", token, { httpOnly: true }).json(user); // Quitar en prod?
+          res.cookie("token", token, { httpOnly: true, path: "/" }).json(user); // Quitar en prod?
         }
       );
     }
