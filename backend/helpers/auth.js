@@ -31,20 +31,44 @@ const sendEmail = async (email, subject, text, html) => {
       auth: {
         user: process.env.USER,
         pass: process.env.PASS,
-      }
-    })
+      },
+    });
 
-    await transporter.sendMail({
+    await new Promise((resolve, reject) => {
+      transporter.verify(function (error, success) {
+        if (error) {
+          console.error(error);
+          reject(error);
+        } else {
+          console.log("Servidor listo para recibir el mensaje");
+        }
+      });
+    });
+
+    const mailData = {
       from: process.env.USER,
       to: email,
       subject: subject,
       text: text,
-      html: html
+      html: html,
+    };
+
+    await new Promise((resolve, reject) => {
+      transporter.sendMail(mailData, (err, info) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          console.log(info);
+          resolve(info);
+        }
+      });
     });
-    console.log("Email sent successfully")
+
+    console.log("Email sent successfully");
   } catch (error) {
-    console.log("Email not sent")
-    console.log(error)
+    console.log("Email not sent");
+    console.log(error);
   }
 };
 
