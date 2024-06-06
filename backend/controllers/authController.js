@@ -188,11 +188,23 @@ const getProfile = async (req, res) => {
       if (user) {
         res.json(user);
       } else {
-        res.clearCookie("token");
+        res.clearCookie("token", {
+          httpOnly: true,
+          path: "/",
+          maxAge: 30 * 24 * 60 * 60 * 1000,
+          sameSite: "none",
+          secure: true,
+        });
         res.json(null);
       }
     } catch (error) {
-      res.clearCookie("token");
+      res.clearCookie("token", {
+        httpOnly: true,
+        path: "/",
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        sameSite: "none",
+        secure: true,
+      });
       res.json(null);
     }
   } else {
@@ -201,7 +213,13 @@ const getProfile = async (req, res) => {
 };
 
 const logoutUser = async (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    path: "/",
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    sameSite: "none",
+    secure: true,
+  });
   res.status(200).json({ status: "success!" });
 };
 
