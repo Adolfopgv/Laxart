@@ -12,14 +12,14 @@ const path = require("path");
 
 app.use(
   cors({
-    credentials: true,
     origin: [
       process.env.NODE_ENV !== "production"
         ? "http://localhost:5173"
         : process.env.BASE_URL,
     ],
-    methods: ["POST", "GET", "DELETE"],
-    allowedHeaders: "Access-Control-Allow-Methods",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Content-Type,Authorization",
+    credentials: true,
   })
 );
 
