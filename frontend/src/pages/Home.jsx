@@ -18,13 +18,10 @@ export default function Home() {
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-4">
                   <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-                    Descubre nuestra colección de joyas artesanales con temática
-                    friki
+                    Descubre una gran colección de accesorios artesanales frikis
                   </h1>
                   <p className="text-gray-500 md:text-lg">
-                    Desde anillos inspirados en tus personajes favoritos hasta
-                    pendientes con detalles geek, tenemos algo para cada
-                    fanático.
+                    Desde pendientes inspirados en tus animes favoritos hasta llaveros con detalles "", tenemos algo para cada fan.
                   </p>
                   <div className="flex gap-4">
                     <Link to="/store/all" className="btn btn-accent">
