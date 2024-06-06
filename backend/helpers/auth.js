@@ -41,6 +41,7 @@ const sendEmail = async (email, subject, text, html) => {
           reject(error);
         } else {
           console.log("Servidor listo para recibir el mensaje");
+          resolve(success);
         }
       });
     });
