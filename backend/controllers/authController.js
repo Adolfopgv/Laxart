@@ -153,7 +153,15 @@ const loginUser = async (req, res) => {
         {},
         (err, token) => {
           if (err) throw err;
-          res.cookie("token", token, { httpOnly: true, path: "/" }).json(user); // Quitar en prod?
+          res
+            .cookie("token", token, {
+              httpOnly: true,
+              path: "/",
+              maxAge: 30 * 24 * 60 * 60 * 1000,
+              sameSite: "none",
+              secure: true,
+            })
+            .json(user); // Quitar en prod?
         }
       );
     }
