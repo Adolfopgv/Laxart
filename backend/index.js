@@ -8,13 +8,18 @@ const cookieParser = require("cookie-parser");
 const app = express();
 app.disable("x-powered-by");
 const bodyParser = require("body-parser");
-const path = require('path');
+const path = require("path");
 
 app.use(
   cors({
     credentials: true,
-    origin: [process.env.NODE_ENV !== "production" ? "http://localhost:5173" : process.env.BASE_URL],
+    origin: [
+      process.env.NODE_ENV !== "production"
+        ? "http://localhost:5173"
+        : process.env.BASE_URL,
+    ],
     methods: ["POST", "GET", "DELETE"],
+    allowedHeaders: "Access-Control-Allow-Methods",
   })
 );
 
