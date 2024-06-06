@@ -16,4 +16,3 @@ pids
 *.pid.lock
 
 .npm
-.vercel
