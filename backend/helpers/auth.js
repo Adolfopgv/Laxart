@@ -26,7 +26,7 @@ const sendEmail = async (email, subject, text, html) => {
     const transporter = nodemailer.createTransport({
       host: process.env.HOST,
       service: process.env.SERVICE,
-      post: Number(process.env.EMAIL_PORT),
+      port: Number(process.env.EMAIL_PORT),
       secure: true, // Cambiar a true en prod
       auth: {
         user: process.env.USER,
