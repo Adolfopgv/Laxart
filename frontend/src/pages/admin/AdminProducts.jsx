@@ -4,7 +4,6 @@ import TextBoxWithTextOnTop from "../../components/TextBoxWithTextOnTop";
 import Error from "../error/Error";
 import { toast } from "react-hot-toast";
 import axios from "axios";
-import StarRating from "../../components/StarRating";
 
 export default function AdminProducts() {
   const { user } = useContext(UserContext);
@@ -164,7 +163,7 @@ export default function AdminProducts() {
         setProducts(await axios.get("/get-products"));
         setEditProductId(null);
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   return (
@@ -261,9 +260,6 @@ export default function AdminProducts() {
                     </th>
                     <th scope="col" className="px-6 py-4">
                       Precio
-                    </th>
-                    <th scope="col" className="px-6 py-4">
-                      Valoración
                     </th>
                   </tr>
                 </thead>
@@ -372,7 +368,10 @@ export default function AdminProducts() {
                             </td>
                             <td className="px-6 py-4">
                               <div className="relative w-24">
-                                <img src={product.image} className="h-24 rounded" />
+                                <img
+                                  src={product.image}
+                                  className="h-24 rounded"
+                                />
                               </div>
                             </td>
                             <td className="whitespace-nowrap px-6 py-4">
@@ -388,9 +387,6 @@ export default function AdminProducts() {
                             </td>
                             <td className="whitespace-nowrap px-6 py-4">
                               {product.price}€
-                            </td>
-                            <td className="whitespace-nowrap px-6 py-4">
-                              {<StarRating rating={product.rating} />}
                             </td>
                             <td className="px-6 py-4">
                               <button

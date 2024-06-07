@@ -6,7 +6,6 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import Error from "./error/Error";
 import { Link } from "react-router-dom";
-import StarRating from "../components/StarRating";
 
 export default function Product() {
   const { user } = useContext(UserContext);
@@ -27,11 +26,12 @@ export default function Product() {
             type: type,
           }
         );
-        if (response.data.error) {
-          toast.error(response.data.error);
-        } else {
+        console.error(response.data.error);
+        if (!response.data.error) {
           toast.success(response.data.message);
           setCartChanged((val) => !val);
+        } else {
+          toast.error(response.data.error);
         }
       } else {
         toast.error("Debes elegir un tipo primero");
@@ -61,11 +61,6 @@ export default function Product() {
               <h1 className="font-bold text-3xl lg:text-4xl">
                 {product.productName}
               </h1>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-0.5">
-                  <StarRating rating={product.rating} />
-                </div>
-              </div>
               <div className="text-4xl font-bold">{product.price}€</div>
               <div className="flex flex-row items-center">
                 <span className="text-xl font-bold">Tipo: </span>

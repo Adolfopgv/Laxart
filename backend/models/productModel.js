@@ -57,6 +57,7 @@ const productSchema = new Schema(
           type: String,
           trim: true,
         },
+        _id: false,
       },
     ],
   },

@@ -71,9 +71,6 @@ export default function News() {
                 <p className="mt-1 text-lg font-medium text-gray-900">
                   {product.price}€
                 </p>
-                <div className="">
-                  {/* <StarRating rating={product.rating} /> */}
-                </div>
               </a>
             ))
           ) : (

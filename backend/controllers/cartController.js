@@ -11,6 +11,7 @@ const addToCart = async (req, res) => {
     }
 
     let cart = await Cart.findOne({ userId });
+    console.log("Carrito add back: ", cart);
 
     if (!cart) {
       cart = await Cart.create({
@@ -24,6 +25,8 @@ const addToCart = async (req, res) => {
       (item) => item.product.toString() === productId && item.type === type
     );
 
+    console.log("producto en carrito", productInCart);
+
     if (productInCart) {
       productInCart.quantity += 1;
     } else {
@@ -35,6 +38,7 @@ const addToCart = async (req, res) => {
     res.status(200).json({ message: "Producto añadido al carrito" });
   } catch (error) {
     res.status(500).json({ error: "Error del servidor" });
+    console.error("Error 500 carrito: ", error);
   }
 };
 
