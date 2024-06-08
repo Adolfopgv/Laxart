@@ -49,7 +49,7 @@ export default function Profile() {
       }
     };
     fetchOrders();
-  }, [loading, orderState]);
+  }, [user, loading, orderState]);
 
   const handlePasswordShow = () => {
     setPasswordEye(!passwordEye);
@@ -70,7 +70,7 @@ export default function Profile() {
     setImgError(false);
   };
 
-  const imgbase64 = (file) => {
+  const imgbase64 = (file, err) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     const dataImg = new Promise((res, rej) => {
@@ -208,6 +208,7 @@ export default function Profile() {
             setRepeatNewPasswordError(true);
             setNewPasswordErrorMsg(changePassword.data.error);
             setRepeatNewPasswordErrorMsg(changePassword.data.error);
+            break;
           case "La contraseña debe contener al menos una mayúscula, una minúscula y un número":
             setNewPasswordError(true);
             setNewPasswordErrorMsg(changePassword.data.error);

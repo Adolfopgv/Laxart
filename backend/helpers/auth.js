@@ -1,13 +1,13 @@
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 
-const hashPassword = (password) => {
+const hash = (valueToHash) => {
   return new Promise((resolve, reject) => {
     bcrypt.genSalt(12, (err, salt) => {
       if (err) {
         reject(err);
       }
-      bcrypt.hash(password, salt, (err, hash) => {
+      bcrypt.hash(valueToHash, salt, (err, hash) => {
         if (err) {
           reject(err);
         }
@@ -17,16 +17,17 @@ const hashPassword = (password) => {
   });
 };
 
-const comparePasswords = (password, hashed) => {
-  return bcrypt.compare(password, hashed);
+const compareHashed = (valueToCompare, hashedValue) => {
+  return bcrypt.compare(valueToCompare, hashedValue);
 };
 
 const sendEmail = async (email, subject, text, html) => {
   try {
+    const secure = process.env.NODE_ENV !== "production" ? false : true;
     const transporter = nodemailer.createTransport({
       host: process.env.HOST,
       port: Number(process.env.EMAIL_PORT),
-      secure: true, // Cambiar a true en prod
+      secure: secure,
       auth: {
         user: process.env.USER,
         pass: process.env.PASS,
@@ -73,7 +74,7 @@ const sendEmail = async (email, subject, text, html) => {
 };
 
 module.exports = {
-  hashPassword,
-  comparePasswords,
+  hash,
+  compareHashed,
   sendEmail,
 };

@@ -1,5 +1,5 @@
 const User = require("../models/userModel");
-const { hashPassword, comparePasswords } = require("../helpers/auth");
+const { hash, compareHashed } = require("../helpers/auth");
 
 const updateAddresses = async (req, res) => {
   try {
@@ -202,12 +202,12 @@ const changePassword = async (req, res) => {
     }
 
     if (user) {
-      const matchPassword = await comparePasswords(
+      const matchPassword = await compareHashed(
         actualPassword,
         user.password
       );
       if (matchPassword) {
-        const hashedPassword = await hashPassword(newPassword);
+        const hashedPassword = await hash(newPassword);
         user.password = hashedPassword;
         await user.save();
         res.status(200).json({ message: "Contraseña actualizada" });
