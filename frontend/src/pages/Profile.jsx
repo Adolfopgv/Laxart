@@ -4,8 +4,10 @@ import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import TextBoxWithTextOnTop from "../components/TextBoxWithTextOnTop";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
+  const navigate = useNavigate();
   const { user, loading, setChange } = useContext(UserContext);
   const [passwordEye, setPasswordEye] = useState(false);
   const [newPasswordEye, setNewPasswordEye] = useState(false);
@@ -84,9 +86,9 @@ export default function Profile() {
     fileInputRef.current.click();
   };
 
-  const openModal = (order) => {
+  const openModal = (order, modal) => {
     setCurrentOrder(order);
-    document.getElementById("my_modal_1").showModal();
+    document.getElementById(modal).showModal();
   };
 
   const changeOrderState = async (orderId, state) => {
@@ -221,6 +223,23 @@ export default function Profile() {
       }
     } catch (error) {
       console.error("Error front changePassword: ", error);
+    }
+  };
+
+  const deleteUser = async () => {
+    const idToast = toast.loading("Eliminando usuario...");
+    try {
+      const deleteUser = await axios.delete(`/users/delete-user/${user._id}`);
+      if (!deleteUser.data.error) {
+        toast.success(deleteUser.data.message, { id: idToast });
+        setChange((val) => !val);
+        navigate("/");
+      } else {
+        toast.error(deleteUser.data.error, { id: idToast });
+      }
+    } catch (error) {
+      toast.error("Error del servidor", { id: idToast });
+      console.log(error);
     }
   };
 
@@ -423,7 +442,7 @@ export default function Profile() {
                         <tr
                           key={order._id}
                           className="border-b border-base-300 hover:bg-base-200 cursor-pointer"
-                          onClick={() => openModal(order)}
+                          onClick={() => openModal(order, "order_modal")}
                         >
                           <td className="px-4 py-2">
                             <div className="font-medium">{index + 1}</div>
@@ -456,8 +475,15 @@ export default function Profile() {
                 </div>
               </div>
             )}
+            <button
+              className="btn btn-error mt-10"
+              onClick={() => openModal(null, "delete_user_modal")}
+            >
+              Eliminar cuenta
+            </button>
           </div>
-          <dialog id="my_modal_1" className="modal">
+
+          <dialog id="order_modal" className="modal">
             <div className="modal-box">
               {currentOrder && (
                 <div>
@@ -580,6 +606,23 @@ export default function Profile() {
                 </div>
               )}
             </div>
+          </dialog>
+          <dialog id="delete_user_modal" className="modal">
+            <form method="dialog" className="modal-box flex flex-col">
+              <span>
+                ¿Estas seguro de que quieres eliminar tu cuenta y todo lo
+                asociado a ella?
+              </span>
+              <div className="flex flex-row gap-4 self-center">
+                <button className="btn btn-outline w-full">No</button>
+                <button
+                  className="btn btn-error w-full"
+                  onClick={() => deleteUser()}
+                >
+                  Si
+                </button>
+              </div>
+            </form>
           </dialog>
         </div>
       )}

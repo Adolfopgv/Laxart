@@ -1,4 +1,6 @@
 const User = require("../models/userModel");
+const Order = require("../models/orderModel");
+const Cart = require("../models/cartModel");
 const { hash, compareHashed } = require("../helpers/auth");
 
 const updateAddresses = async (req, res) => {
@@ -202,10 +204,7 @@ const changePassword = async (req, res) => {
     }
 
     if (user) {
-      const matchPassword = await compareHashed(
-        actualPassword,
-        user.password
-      );
+      const matchPassword = await compareHashed(actualPassword, user.password);
       if (matchPassword) {
         const hashedPassword = await hash(newPassword);
         user.password = hashedPassword;
@@ -222,6 +221,19 @@ const changePassword = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    await Order.findOneAndDelete({ user: user });
+    await Cart.findOneAndDelete({ userId: userId });
+    await User.findByIdAndDelete(userId);
+    res.status(200).json({ message: "Usuario eliminado correctamente" });
+  } catch (error) {
+    console.error("Error eliminando usuario: ", error);
+  }
+};
+
 module.exports = {
   updateAddresses,
   getShippingAddress,
@@ -230,4 +242,5 @@ module.exports = {
   changeUserAvatar,
   changeUsername,
   changePassword,
+  deleteUser,
 };

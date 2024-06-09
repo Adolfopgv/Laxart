@@ -179,7 +179,7 @@ const Checkout = () => {
                       <TextBoxWithTextOnTop
                         text="Nombre"
                         type="text"
-                        placeholder="John Doe"
+                        placeholder="Introduce tu nombre..."
                         value={shippingDetails.name}
                         onChange={(e) =>
                           setShippingDetails({
@@ -191,7 +191,7 @@ const Checkout = () => {
                       <TextBoxWithTextOnTop
                         text="Apellidos"
                         type="text"
-                        placeholder="John Doe"
+                        placeholder="Introduce tu apellido..."
                         value={shippingDetails.surname}
                         onChange={(e) =>
                           setShippingDetails({
@@ -204,7 +204,7 @@ const Checkout = () => {
                     <TextBoxWithTextOnTop
                       text="Dirección 1"
                       type="text"
-                      placeholder="123 Main St, Anytown USA"
+                      placeholder="Introduce tu dirección..."
                       value={shippingDetails.address1}
                       onChange={(e) =>
                         setShippingDetails({
@@ -216,7 +216,7 @@ const Checkout = () => {
                     <TextBoxWithTextOnTop
                       text="Dirección 2 (opcional)"
                       type="text"
-                      placeholder="123 Main St, Anytown USA"
+                      placeholder="Introduce tu dirección..."
                       value={shippingDetails.address2}
                       onChange={(e) =>
                         setShippingDetails({
@@ -228,7 +228,7 @@ const Checkout = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <TextBoxWithTextOnTop
                         text="País"
-                        placeholder="Anytown"
+                        placeholder="Introduce tu país..."
                         type="text"
                         value={shippingDetails.country}
                         onChange={(e) =>
@@ -240,7 +240,7 @@ const Checkout = () => {
                       />
                       <TextBoxWithTextOnTop
                         text="Provincia"
-                        placeholder="CA"
+                        placeholder="Introduce tu provincia..."
                         type="text"
                         value={shippingDetails.province}
                         onChange={(e) =>
@@ -255,7 +255,7 @@ const Checkout = () => {
                       <TextBoxWithTextOnTop
                         text="Localidad"
                         type="text"
-                        placeholder="12345"
+                        placeholder="Introduce tu localidad..."
                         value={shippingDetails.locality}
                         onChange={(e) =>
                           setShippingDetails({
@@ -267,7 +267,7 @@ const Checkout = () => {
                       <TextBoxWithTextOnTop
                         text="Código Postal"
                         type="number"
-                        placeholder="United States"
+                        placeholder="Introduce tu código postal..."
                         value={shippingDetails.postalCode}
                         onChange={(e) =>
                           setShippingDetails({

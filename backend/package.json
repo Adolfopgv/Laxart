@@ -4,9 +4,12 @@
   "description": "E-commerce final proyect",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=5000",
     "dev": "nodemon index.js",
     "start": "node index.js"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "author": "Adolfo Perez-Gascon Valls",
   "license": "ISC",
@@ -17,6 +20,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "country-state-city": "^3.2.1",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
@@ -25,5 +29,10 @@
     "nodemailer": "^6.9.13",
     "nodemon": "^3.1.0",
     "stripe": "^15.8.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "mongodb-memory-server": "^9.3.0",
+    "supertest": "^7.0.0"
   }
 }

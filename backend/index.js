@@ -1,9 +1,12 @@
 const express = require("express");
-if (process.env.NODE_ENV !== "production") {
+
+process.env.NODE_ENV !== "production" &&
   require("dotenv").config({ path: __dirname + "/.env" });
-}
+
 const cors = require("cors");
-const db = require("./helpers/db"); // Database connection
+
+process.env.NODE_ENV !== "test" && require("./helpers/db");
+
 const cookieParser = require("cookie-parser");
 const app = express();
 app.disable("x-powered-by");
@@ -36,7 +39,11 @@ app.use("/", require("./routes/cartRoutes"));
 app.use("/", require("./routes/userRoutes"));
 app.use("/", require("./routes/orderRoutes"));
 
-const port = process.env.PORT || 3000;
-app.listen(port, () =>
-  console.log(`Server is running on http://localhost:${port}`)
-);
+if (process.env.NODE_ENV !== "test") {
+  const port = process.env.PORT || 3000;
+  app.listen(port, () =>
+    console.log(`Server is running on http://localhost:${port}`)
+  );
+}
+
+module.exports = { app };
