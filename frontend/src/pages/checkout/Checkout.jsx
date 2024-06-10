@@ -43,6 +43,24 @@ const Checkout = () => {
     locality: "",
     postalCode: "",
   });
+  const [error, setError] = useState({
+    name: false,
+    surname: false,
+    address1: false,
+    country: false,
+    province: false,
+    locality: false,
+    postalCode: false,
+  });
+  const [errorMsg, setErrorMsg] = useState({
+    name: "",
+    surname: "",
+    address1: "",
+    country: "",
+    province: "",
+    locality: "",
+    postalCode: "",
+  });
   const stripe = useStripe();
   const elements = useElements();
 
@@ -89,7 +107,6 @@ const Checkout = () => {
       postalCode,
     } = shippingDetails;
 
-    console.log("Envio: ", shippingDetails);
     try {
       const response = await axios.post(`/users/${user._id}/update-addresses`, {
         name,
@@ -102,7 +119,6 @@ const Checkout = () => {
         postalCode,
       });
 
-      console.log("envio actualizado: ", response.data);
       if (!response.data.error) {
         const idToast2 = toast.loading(response.data.message, { id: idToast1 });
         setShippingDetails(response.data);
@@ -159,6 +175,58 @@ const Checkout = () => {
       } else {
         toast.error(response.data.error, { id: idToast1 });
         setButton(true);
+        switch (response.data.error) {
+          case "El nombre es requerido":
+            setError({ ...error, name: true });
+            setErrorMsg({ ...errorMsg, name: response.data.error });
+            break;
+          case "El apellido es requerido":
+            setError({ ...error, surname: true });
+            setErrorMsg({ ...errorMsg, surname: response.data.error });
+            break;
+          case "La dirección 1 es requerido":
+            setError({ ...error, address1: true });
+            setErrorMsg({ ...errorMsg, address1: response.data.error });
+            break;
+          case "La ciudad es requerida":
+            setError({ ...error, country: true });
+            setErrorMsg({ ...errorMsg, country: response.data.error });
+            break;
+          case "La provincia es requerida":
+            setError({ ...error, province: true });
+            setErrorMsg({ ...errorMsg, province: response.data.error });
+            break;
+          case "La localidad es requerida":
+            setError({ ...error, locality: true });
+            setErrorMsg({ ...errorMsg, locality: response.data.error });
+            break;
+          case "El código postal es requerido":
+            setError({ ...error, postalCode: true });
+            setErrorMsg({ ...errorMsg, postalCode: response.data.error });
+            break;
+          default:
+            setError({
+              ...error,
+              name: true,
+              surname: true,
+              address1: true,
+              country: true,
+              province: true,
+              locality: true,
+              postalCode: true,
+            });
+            setErrorMsg({
+              ...errorMsg,
+              name: response.data.error,
+              surname: response.data.error,
+              address1: response.data.error,
+              country: response.data.error,
+              province: response.data.error,
+              locality: response.data.error,
+              postalCode: response.data.error,
+            });
+            break;
+        }
       }
     } catch (error) {
       console.error("Error during checkout:", error);
@@ -179,43 +247,65 @@ const Checkout = () => {
                 <div className="card-body mt-4">
                   <div className="grid gap-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <TextBoxWithTextOnTop
-                        text="Nombre"
-                        type="text"
-                        placeholder="Introduce tu nombre..."
-                        value={shippingDetails.name}
-                        onChange={(e) =>
-                          setShippingDetails({
-                            ...shippingDetails,
-                            name: e.target.value,
-                          })
-                        }
-                      />
-                      <TextBoxWithTextOnTop
-                        text="Apellidos"
-                        type="text"
-                        placeholder="Introduce tu apellido..."
-                        value={shippingDetails.surname}
-                        onChange={(e) =>
-                          setShippingDetails({
-                            ...shippingDetails,
-                            surname: e.target.value,
-                          })
-                        }
-                      />
+                      <div className="flex flex-col">
+                        <TextBoxWithTextOnTop
+                          text="Nombre"
+                          type="text"
+                          placeholder="Introduce tu nombre..."
+                          value={shippingDetails.name}
+                          onChange={(e) => {
+                            setShippingDetails({
+                              ...shippingDetails,
+                              name: e.target.value,
+                            });
+                            setError({ ...error, name: false });
+                          }}
+                        />
+                        {error.name && (
+                          <span className="text-error ml-2 font-bold">
+                            {errorMsg.name}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-col">
+                        <TextBoxWithTextOnTop
+                          text="Apellidos"
+                          type="text"
+                          placeholder="Introduce tu apellido..."
+                          value={shippingDetails.surname}
+                          onChange={(e) => {
+                            setShippingDetails({
+                              ...shippingDetails,
+                              surname: e.target.value,
+                            });
+                            setError({ ...error, surname: false });
+                          }}
+                        />
+                        {error.surname && (
+                          <span className="text-error ml-2 font-bold">
+                            {errorMsg.surname}
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <TextBoxWithTextOnTop
                       text="Dirección 1"
                       type="text"
                       placeholder="Introduce tu dirección..."
                       value={shippingDetails.address1}
-                      onChange={(e) =>
+                      onChange={(e) => {
                         setShippingDetails({
                           ...shippingDetails,
                           address1: e.target.value,
-                        })
-                      }
+                        });
+                        setError({ ...error, address1: false });
+                      }}
                     />
+                    {error.address1 && (
+                      <span className="text-error ml-2 font-bold">
+                        {errorMsg.address1}
+                      </span>
+                    )}
                     <TextBoxWithTextOnTop
                       text="Dirección 2 (opcional)"
                       type="text"
@@ -229,56 +319,84 @@ const Checkout = () => {
                       }
                     />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <TextBoxWithTextOnTop
-                        text="País"
-                        placeholder="Introduce tu país..."
-                        type="text"
-                        value={shippingDetails.country}
-                        onChange={(e) =>
-                          setShippingDetails({
-                            ...shippingDetails,
-                            country: e.target.value,
-                          })
-                        }
-                      />
-                      <TextBoxWithTextOnTop
-                        text="Provincia"
-                        placeholder="Introduce tu provincia..."
-                        type="text"
-                        value={shippingDetails.province}
-                        onChange={(e) =>
-                          setShippingDetails({
-                            ...shippingDetails,
-                            province: e.target.value,
-                          })
-                        }
-                      />
+                      <div className="flex flex-col">
+                        <TextBoxWithTextOnTop
+                          text="País"
+                          placeholder="Introduce tu país..."
+                          type="text"
+                          value={shippingDetails.country}
+                          onChange={(e) =>
+                            setShippingDetails({
+                              ...shippingDetails,
+                              country: e.target.value,
+                            })
+                          }
+                        />
+                        {error.country && (
+                          <span className="text-error ml-2 font-bold">
+                            {errorMsg.country}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-col">
+                        <TextBoxWithTextOnTop
+                          text="Provincia"
+                          placeholder="Introduce tu provincia..."
+                          type="text"
+                          value={shippingDetails.province}
+                          onChange={(e) =>
+                            setShippingDetails({
+                              ...shippingDetails,
+                              province: e.target.value,
+                            })
+                          }
+                        />
+                        {error.province && (
+                          <span className="text-error ml-2 font-bold">
+                            {errorMsg.province}
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <TextBoxWithTextOnTop
-                        text="Localidad"
-                        type="text"
-                        placeholder="Introduce tu localidad..."
-                        value={shippingDetails.locality}
-                        onChange={(e) =>
-                          setShippingDetails({
-                            ...shippingDetails,
-                            locality: e.target.value,
-                          })
-                        }
-                      />
-                      <TextBoxWithTextOnTop
-                        text="Código Postal"
-                        type="number"
-                        placeholder="Introduce tu código postal..."
-                        value={shippingDetails.postalCode}
-                        onChange={(e) =>
-                          setShippingDetails({
-                            ...shippingDetails,
-                            postalCode: e.target.value,
-                          })
-                        }
-                      />
+                      <div className="flex flex-col">
+                        <TextBoxWithTextOnTop
+                          text="Localidad"
+                          type="text"
+                          placeholder="Introduce tu localidad..."
+                          value={shippingDetails.locality}
+                          onChange={(e) =>
+                            setShippingDetails({
+                              ...shippingDetails,
+                              locality: e.target.value,
+                            })
+                          }
+                        />
+                        {error.locality && (
+                          <span className="text-error ml-2 font-bold">
+                            {errorMsg.locality}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-col">
+                        <TextBoxWithTextOnTop
+                          text="Código Postal"
+                          type="number"
+                          placeholder="Introduce tu código postal..."
+                          value={shippingDetails.postalCode}
+                          onChange={(e) =>
+                            setShippingDetails({
+                              ...shippingDetails,
+                              postalCode: e.target.value,
+                            })
+                          }
+                        />
+                        {error.postalCode && (
+                          <span className="text-error ml-2 font-bold">
+                            {errorMsg.postalCode}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

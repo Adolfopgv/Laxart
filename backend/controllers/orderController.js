@@ -11,7 +11,7 @@ const checkoutOrder = async (req, res) => {
   const { id, amount } = req.body;
 
   try {
-    const payment = await stripe.paymentIntents.create({
+    await stripe.paymentIntents.create({
       amount,
       currency: "EUR",
       description: "Cart products",
