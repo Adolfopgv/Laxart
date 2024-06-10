@@ -1,12 +1,16 @@
 const Stripe = require("stripe");
 const Order = require("../models/orderModel");
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+const stripeSecretKey =
+  process.env.NODE_ENV !== "production"
+    ? process.env.STRIPE_TEST_SECRET_KEY
+    : process.env.STRIPE_LIVE_SECRET_KEY;
+const stripe = new Stripe(stripeSecretKey);
 
 const checkoutOrder = async (req, res) => {
   const { id, amount } = req.body;
 
   try {
-    console.log(req.body);
     const payment = await stripe.paymentIntents.create({
       amount,
       currency: "EUR",
@@ -18,7 +22,6 @@ const checkoutOrder = async (req, res) => {
         allow_redirects: "never",
       },
     });
-    console.log(payment);
 
     res.status(200).json({ message: "Pago realizado con éxito" });
   } catch (error) {

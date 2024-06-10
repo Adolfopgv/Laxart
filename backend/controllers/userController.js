@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
 const Order = require("../models/orderModel");
 const Cart = require("../models/cartModel");
-const { hash, compareHashed } = require("../helpers/auth");
+const { hash, compareHashed, sendEmail } = require("../helpers/auth");
 
 const updateAddresses = async (req, res) => {
   try {
@@ -234,6 +234,39 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const contactEmail = async (req, res) => {
+  try {
+    const { email, name, msg } = req.body;
+
+    if (!email && !name && !msg) {
+      return res.json({ error: "No puedes dejar espacios en blanco" });
+    }
+    if (!email) {
+      return res.json({ error: "El correo es requerido" });
+    }
+    if (!name) {
+      return res.json({ error: "El nombre es requerido" });
+    }
+    if (!msg) {
+      return res.json({ error: "El mensaje es requerido" });
+    }
+
+    sendEmail(
+      process.env.USER,
+      name + " tiene una propuesta!",
+      msg,
+      `<h1>${name}</h1>
+      <span>Correo: ${email}</span>
+      <hr>
+      <span>Mensaje: ${msg}</span>`
+    );
+    return res.json({ message: "¡Correo enviado!" });
+  } catch (error) {
+    res.json({ error: "Error al enviar el correo" });
+    console.error("Error contactEmail back: ", error);
+  }
+};
+
 module.exports = {
   updateAddresses,
   getShippingAddress,
@@ -243,4 +276,5 @@ module.exports = {
   changeUsername,
   changePassword,
   deleteUser,
+  contactEmail,
 };

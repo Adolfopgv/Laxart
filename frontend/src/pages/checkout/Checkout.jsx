@@ -13,7 +13,11 @@ import TextBoxWithTextOnTop from "../../components/TextBoxWithTextOnTop";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const stripePromise = loadStripe(import.meta.env.VITE_APP_STRIPE_PUBLIC_KEY);
+const stripePublicKey =
+  import.meta.env.VITE_APP_NODE_ENV !== "production"
+    ? import.meta.env.VITE_APP_STRIPE_TEST_PUBLIC_KEY
+    : import.meta.env.VITE_APP_STRIPE_LIVE_PUBLIC_KEY;
+const stripePromise = loadStripe(stripePublicKey);
 
 export const Wrapper = () => (
   <Elements stripe={stripePromise} className="p-4 border rounded-lg">
@@ -165,7 +169,6 @@ const Checkout = () => {
   return (
     <>
       <div className="flex flex-col min-h-screen bg-primary">
-        {console.log(user)}
         <main className="flex-1 py-8 md:py-12">
           <div className="container mx-auto px-4 md:px-6 grid gap-8 lg:grid-cols-[2fr_1fr]">
             <div className="space-y-8">

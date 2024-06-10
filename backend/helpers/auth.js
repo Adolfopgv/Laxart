@@ -23,11 +23,10 @@ const compareHashed = (valueToCompare, hashedValue) => {
 
 const sendEmail = async (email, subject, text, html) => {
   try {
-    const secure = process.env.NODE_ENV !== "production" ? false : true;
     const transporter = nodemailer.createTransport({
       host: process.env.HOST,
       port: Number(process.env.EMAIL_PORT),
-      secure: secure,
+      secure: true,
       auth: {
         user: process.env.USER,
         pass: process.env.PASS,
