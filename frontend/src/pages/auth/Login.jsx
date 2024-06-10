@@ -169,10 +169,10 @@ export default function Login() {
                   >
                     Iniciar sesión
                   </button>
-                  <GoogleLogin
+                  {/* <GoogleLogin
                     shape="circle"
                     onSuccess={createOrGetGoogleUser}
-                  />
+                  /> */}
 
                   <div className="text-center mt-4">
                     ¿No tienes cuenta?{" "}
