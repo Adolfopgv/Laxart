@@ -22,6 +22,7 @@ const cartSchema = new Schema(
         type: {
           type: String,
         },
+        _id: false,
       },
     ],
   },

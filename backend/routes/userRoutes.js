@@ -8,6 +8,8 @@ const {
   changeUserAvatar,
   changeUsername,
   changePassword,
+  deleteUser,
+  contactEmail,
 } = require("../controllers/userController");
 
 router.post("/users/:id/update-addresses", updateAddresses);
@@ -17,5 +19,7 @@ router.get("/users", getAllUsers);
 router.post("/users/:id/change-avatar", changeUserAvatar);
 router.post("/users/:id/change-username", changeUsername);
 router.post("/users/:id/change-password", changePassword);
+router.delete("/users/delete-user/:id", deleteUser);
+router.post("/users/send-email", contactEmail);
 
 module.exports = router;

@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import StarRating from "../components/StarRating";
 import TextBoxWithTextOnTop from "../components/TextBoxWithTextOnTop";
 
 export default function Store() {
@@ -92,32 +91,29 @@ export default function Store() {
             renderSkeletons()
           ) : products?.length > 0 ? (
             filteredProducts.map((product) => (
-              <a
-                key={product._id}
-                className="group"
-                onClick={() =>
-                  navigate(`/store/${product.genre}/${product.productName}`, {
-                    state: { product },
-                  })
-                }
-              >
+              <a key={product._id} className="group">
                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                   <img
                     src={product.image}
                     alt={product.productName}
-                    className="h-full w-full object-cover object-center group-hover:opacity-75"
+                    className="h-full w-full object-cover object-center hover:opacity-75 hover:cursor-pointer"
+                    onClick={() =>
+                      navigate(
+                        `/store/${product.genre}/${product.productName}`,
+                        {
+                          state: { product },
+                        }
+                      )
+                    }
                   />
                 </div>
                 <h3 className="mt-4 text-base text-gray-700">
                   {product.productName}
                 </h3>
                 <p className="text-xs text-black">{product.genre}</p>
-                <p className="mt-1 text-lg font-medium text-gray-900">
+                <p className="text-lg font-medium text-gray-900">
                   {product.price}€
                 </p>
-                <div className="">
-                  <StarRating rating={product.rating} />
-                </div>
               </a>
             ))
           ) : (

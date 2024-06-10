@@ -53,10 +53,15 @@ const productSchema = new Schema(
           type: Schema.Types.ObjectId,
           ref: "User",
         },
+        username: {
+          type: String,
+          trim: true,
+        },
         review: {
           type: String,
           trim: true,
         },
+        _id: false,
       },
     ],
   },

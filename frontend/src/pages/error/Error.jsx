@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function Error() {
   return (
-    <div>Error</div>
+    <div className='text-6xl m-16'>Error, vuelve al inicio por favor</div>
   )
 }

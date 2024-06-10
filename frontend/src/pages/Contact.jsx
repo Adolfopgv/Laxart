@@ -1,7 +1,86 @@
 import imgAbout from "../assets/about_img/img4_about.jpg";
 import TextBoxWithTextOnTop from "../components/TextBoxWithTextOnTop";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function Contact() {
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+    msg: "",
+  });
+  const [error, setError] = useState({
+    nameError: false,
+    emailError: false,
+    msgError: false,
+  });
+  const [errorMsg, setErrorMsg] = useState({
+    nameErrorMsg: "",
+    emailErrorMsg: "",
+    msgErrorMsg: "",
+  });
+
+  const contactEmail = async (e) => {
+    e.preventDefault();
+    const idToast = toast.loading("Enviando el correo...");
+    try {
+      const response = await axios.post("/users/send-email", {
+        email: data.email,
+        name: data.name,
+        msg: data.msg,
+      });
+
+      if (!response.data.error) {
+        toast.success(response.data.message, { id: idToast });
+        setData({
+          name: "",
+          email: "",
+          msg: "",
+        });
+      } else {
+        switch (response.data.error) {
+          case "El correo es requerido":
+            setError(...error, {
+              emailError: true,
+            });
+            setErrorMsg(...errorMsg, {
+              emailErrorMsg: response.data.error,
+            });
+            break;
+          case "El nombre es requerido":
+            setError(...error, {
+              nameError: true,
+            });
+            setErrorMsg(...errorMsg, {
+              nameErrorMsg: response.data.error,
+            });
+            break;
+          case "El mensaje es requerido":
+            setError(...error, {
+              msgError: true,
+            });
+            setErrorMsg(...errorMsg, {
+              msgErrorMsg: response.data.error,
+            });
+            break;
+          default:
+            setError({
+              emailError: true,
+              nameError: true,
+              msgError: true,
+            });
+            setErrorMsg({
+              emailErrorMsg: response.data.error,
+              nameErrorMsg: response.data.error,
+              msgErrorMsg: response.data.error,
+            });
+            break;
+        }
+      }
+    } catch (error) {}
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 md:px-6 md:py-12">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -11,31 +90,61 @@ export default function Contact() {
           <p className="text-lg text-gray-600">
             Déjame un mensaje y me pondré en contacto contigo.
           </p>
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={contactEmail}>
             <div>
               <TextBoxWithTextOnTop
                 text="Nombre"
                 type="text"
                 placeholder="Ingresa tu nombre"
+                value={data.name}
+                onChange={(e) => {
+                  setData({ ...data, name: e.target.value });
+                  setError({ ...error, nameError: false });
+                }}
               />
             </div>
+            {error.nameError && (
+              <span className="text-error ml-2 font-bold">
+                {errorMsg.nameErrorMsg}
+              </span>
+            )}
             <div>
               <TextBoxWithTextOnTop
                 text="Correo electrónico"
                 type="email"
                 placeholder="Ingresa tu correo electrónico"
+                value={data.email}
+                onChange={(e) => {
+                  setData({ ...data, email: e.target.value });
+                  setError({ ...error, emailError: false });
+                }}
               />
             </div>
+            {error.emailError && (
+              <span className="text-error ml-2 font-bold">
+                {errorMsg.emailErrorMsg}
+              </span>
+            )}
             <div>
-              <label htmlFor="message" className="block text-lg text-gray-800">
+              <label htmlFor="message" className="block">
                 Mensaje
               </label>
               <textarea
                 id="message"
                 placeholder="Escribe tu mensaje"
+                value={data.msg}
+                onChange={(e) => {
+                  setData({ ...data, msg: e.target.value });
+                  setError({ ...error, msgError: false });
+                }}
                 className="block w-full h-32 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
               />
             </div>
+            {error.msgError && (
+              <span className="text-error ml-2 font-bold">
+                {errorMsg.msgErrorMsg}
+              </span>
+            )}
             <button type="submit" className="btn btn-accent w-full">
               Enviar
             </button>

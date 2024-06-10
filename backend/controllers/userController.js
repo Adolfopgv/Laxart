@@ -1,5 +1,7 @@
 const User = require("../models/userModel");
-const { hashPassword, comparePasswords } = require("../helpers/auth");
+const Order = require("../models/orderModel");
+const Cart = require("../models/cartModel");
+const { hash, compareHashed, sendEmail } = require("../helpers/auth");
 
 const updateAddresses = async (req, res) => {
   try {
@@ -202,12 +204,9 @@ const changePassword = async (req, res) => {
     }
 
     if (user) {
-      const matchPassword = await comparePasswords(
-        actualPassword,
-        user.password
-      );
+      const matchPassword = await compareHashed(actualPassword, user.password);
       if (matchPassword) {
-        const hashedPassword = await hashPassword(newPassword);
+        const hashedPassword = await hash(newPassword);
         user.password = hashedPassword;
         await user.save();
         res.status(200).json({ message: "Contraseña actualizada" });
@@ -222,6 +221,52 @@ const changePassword = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    await Order.findOneAndDelete({ user: user });
+    await Cart.findOneAndDelete({ userId: userId });
+    await User.findByIdAndDelete(userId);
+    res.status(200).json({ message: "Usuario eliminado correctamente" });
+  } catch (error) {
+    console.error("Error eliminando usuario: ", error);
+  }
+};
+
+const contactEmail = async (req, res) => {
+  try {
+    const { email, name, msg } = req.body;
+
+    if (!email && !name && !msg) {
+      return res.json({ error: "No puedes dejar espacios en blanco" });
+    }
+    if (!email) {
+      return res.json({ error: "El correo es requerido" });
+    }
+    if (!name) {
+      return res.json({ error: "El nombre es requerido" });
+    }
+    if (!msg) {
+      return res.json({ error: "El mensaje es requerido" });
+    }
+
+    sendEmail(
+      process.env.USER,
+      name + " tiene una propuesta!",
+      msg,
+      `<h1>${name}</h1>
+      <span>Correo: ${email}</span>
+      <hr>
+      <span>Mensaje: ${msg}</span>`
+    );
+    return res.json({ message: "¡Correo enviado!" });
+  } catch (error) {
+    res.json({ error: "Error al enviar el correo" });
+    console.error("Error contactEmail back: ", error);
+  }
+};
+
 module.exports = {
   updateAddresses,
   getShippingAddress,
@@ -230,4 +275,6 @@ module.exports = {
   changeUserAvatar,
   changeUsername,
   changePassword,
+  deleteUser,
+  contactEmail,
 };

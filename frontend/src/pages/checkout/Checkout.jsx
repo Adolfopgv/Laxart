@@ -13,7 +13,11 @@ import TextBoxWithTextOnTop from "../../components/TextBoxWithTextOnTop";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const stripePromise = loadStripe(import.meta.env.VITE_APP_STRIPE_PUBLIC_KEY);
+const stripePublicKey =
+  import.meta.env.VITE_APP_NODE_ENV !== "production"
+    ? import.meta.env.VITE_APP_STRIPE_TEST_PUBLIC_KEY
+    : import.meta.env.VITE_APP_STRIPE_LIVE_PUBLIC_KEY;
+const stripePromise = loadStripe(stripePublicKey);
 
 export const Wrapper = () => (
   <Elements stripe={stripePromise} className="p-4 border rounded-lg">
@@ -165,7 +169,6 @@ const Checkout = () => {
   return (
     <>
       <div className="flex flex-col min-h-screen bg-primary">
-        {console.log(user)}
         <main className="flex-1 py-8 md:py-12">
           <div className="container mx-auto px-4 md:px-6 grid gap-8 lg:grid-cols-[2fr_1fr]">
             <div className="space-y-8">
@@ -179,7 +182,7 @@ const Checkout = () => {
                       <TextBoxWithTextOnTop
                         text="Nombre"
                         type="text"
-                        placeholder="John Doe"
+                        placeholder="Introduce tu nombre..."
                         value={shippingDetails.name}
                         onChange={(e) =>
                           setShippingDetails({
@@ -191,7 +194,7 @@ const Checkout = () => {
                       <TextBoxWithTextOnTop
                         text="Apellidos"
                         type="text"
-                        placeholder="John Doe"
+                        placeholder="Introduce tu apellido..."
                         value={shippingDetails.surname}
                         onChange={(e) =>
                           setShippingDetails({
@@ -204,7 +207,7 @@ const Checkout = () => {
                     <TextBoxWithTextOnTop
                       text="Dirección 1"
                       type="text"
-                      placeholder="123 Main St, Anytown USA"
+                      placeholder="Introduce tu dirección..."
                       value={shippingDetails.address1}
                       onChange={(e) =>
                         setShippingDetails({
@@ -216,7 +219,7 @@ const Checkout = () => {
                     <TextBoxWithTextOnTop
                       text="Dirección 2 (opcional)"
                       type="text"
-                      placeholder="123 Main St, Anytown USA"
+                      placeholder="Introduce tu dirección..."
                       value={shippingDetails.address2}
                       onChange={(e) =>
                         setShippingDetails({
@@ -228,7 +231,7 @@ const Checkout = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <TextBoxWithTextOnTop
                         text="País"
-                        placeholder="Anytown"
+                        placeholder="Introduce tu país..."
                         type="text"
                         value={shippingDetails.country}
                         onChange={(e) =>
@@ -240,7 +243,7 @@ const Checkout = () => {
                       />
                       <TextBoxWithTextOnTop
                         text="Provincia"
-                        placeholder="CA"
+                        placeholder="Introduce tu provincia..."
                         type="text"
                         value={shippingDetails.province}
                         onChange={(e) =>
@@ -255,7 +258,7 @@ const Checkout = () => {
                       <TextBoxWithTextOnTop
                         text="Localidad"
                         type="text"
-                        placeholder="12345"
+                        placeholder="Introduce tu localidad..."
                         value={shippingDetails.locality}
                         onChange={(e) =>
                           setShippingDetails({
@@ -267,7 +270,7 @@ const Checkout = () => {
                       <TextBoxWithTextOnTop
                         text="Código Postal"
                         type="number"
-                        placeholder="United States"
+                        placeholder="Introduce tu código postal..."
                         value={shippingDetails.postalCode}
                         onChange={(e) =>
                           setShippingDetails({

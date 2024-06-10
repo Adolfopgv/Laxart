@@ -79,6 +79,7 @@ const orderSchema = new Schema(
         image: {
           type: String,
         },
+        _id: false,
       },
     ],
     totalPrice: {

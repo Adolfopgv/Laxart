@@ -1,4 +1,5 @@
 const Product = require("../models/productModel");
+const User = require("../models/userModel");
 
 const uploadProduct = async (req, res) => {
   try {
@@ -139,6 +140,47 @@ const getProductsByQuery = async (req, res) => {
   }
 };
 
+const addReview = async (req, res) => {
+  try {
+    const userId = req.params.userid;
+    const productId = req.params.productid;
+    const review = req.body.review;
+
+    if (!review) {
+      return res.json({ error: "Debes escribir una reseña" });
+    }
+
+    const user = await User.findById(userId);
+
+    if (user) {
+      const product = await Product.findById(productId);
+      product.reviews.push({
+        userId: userId,
+        username: user.username,
+        review: review,
+      });
+      await product.save();
+      return res.status(200).json({ message: "Reseña añadida" });
+    }
+    res.status(400).json({ message: "No se ha podido subir la reseña" });
+  } catch (error) {
+    console.error("Error reseñas back: ", error);
+  }
+};
+
+const getReviews = async (req, res) => {
+  try {
+    const productid = req.params.productid;
+    const product = await Product.findById(productid);
+
+    if (product) {
+      return res.json(product.reviews);
+    }
+  } catch (error) {
+    console.error("Error getReviews back: ", error);
+  }
+};
+
 module.exports = {
   uploadProduct,
   getProducts,
@@ -146,4 +188,6 @@ module.exports = {
   updateProduct,
   getProductById,
   getProductsByQuery,
+  addReview,
+  getReviews,
 };
